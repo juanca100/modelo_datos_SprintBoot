@@ -34,4 +34,5 @@ public class Transaccion {
         this.vendedor = vendedor;
         this.comprador = comprador;
     }
+
 }
