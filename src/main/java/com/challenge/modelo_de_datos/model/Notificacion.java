@@ -13,11 +13,14 @@ public class Notificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_notificacion")
     int idNotificacion;
+
     @Column(name="descripcion")
     String descripcion;
+
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
+
     @ManyToOne
     @JoinColumn(name = "id_tipo_notificacion")
     private TipoNotificacion tipoNotificacion;
