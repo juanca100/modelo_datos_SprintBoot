@@ -8,22 +8,22 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="estado_pago")
-public class Estado_pago {
+public class EstadoPago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_estado_pago")
-    int id_tipo_pago;
+    int idEstadoPago;
 
     @Column(name = "estado_pago")
-    String estado_pago;
+    String estadoPago;
 
 
-public Estado_pago(){
+public EstadoPago(){
 
 }
 
-public Estado_pago(int id_estado_pago, String estado_pago){
-    this.id_tipo_pago = id_estado_pago;
-    this.estado_pago = estado_pago;
+public EstadoPago(int id_estado_pago, String estado_pago){
+    this.idEstadoPago = id_estado_pago;
+    this.estadoPago = estado_pago;
     }
 }

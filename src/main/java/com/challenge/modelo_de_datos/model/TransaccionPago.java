@@ -25,16 +25,16 @@ public class TransaccionPago {
 
     @ManyToOne
     @JoinColumn(name = "id_estado_pago")
-    Estado_pago estadoPago;
+    EstadoPago estadoPago;
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_pago")
-    Tipo_pago tipoPago;
+    TipoPago tipoPago;
 
     public TransaccionPago() {
     }
 
-    public TransaccionPago(int idTransaccionPago, Transaccion transaccion, float monto_total, String descripccion, Estado_pago estadoPago, Tipo_pago tipoPago) {
+    public TransaccionPago(int idTransaccionPago, Transaccion transaccion, float monto_total, String descripccion, EstadoPago estadoPago, TipoPago tipoPago) {
         this.idTransaccionPago = idTransaccionPago;
         this.transaccion = transaccion;
         this.monto_total = monto_total;
