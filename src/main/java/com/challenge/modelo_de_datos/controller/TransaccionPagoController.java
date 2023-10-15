@@ -1,6 +1,6 @@
 package com.challenge.modelo_de_datos.controller;
 
-import com.challenge.modelo_de_datos.model.Transaccion_pago;
+import com.challenge.modelo_de_datos.model.TransaccionPago;
 import com.challenge.modelo_de_datos.service.TransaccionPagoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +19,17 @@ public class TransaccionPagoController {
     }
 
     @GetMapping
-    public List<Transaccion_pago> getTransaccionesPago() {
+    public List<TransaccionPago> getTransaccionesPago() {
         return transaccionPagoService.getTransaccionesPago();
     }
 
     @PostMapping
-    public ResponseEntity<Object> addTransaccionPago(@RequestBody Transaccion_pago transaccionPago) {
+    public ResponseEntity<Object> addTransaccionPago(@RequestBody TransaccionPago transaccionPago) {
         return transaccionPagoService.newTransaccionPago(transaccionPago);
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateTransaccionPago(@RequestBody Transaccion_pago transaccionPago) {
+    public ResponseEntity<Object> updateTransaccionPago(@RequestBody TransaccionPago transaccionPago) {
         return transaccionPagoService.updateTransaccionPago(transaccionPago);
     }
 

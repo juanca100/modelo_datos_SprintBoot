@@ -6,28 +6,24 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@IdClass(TransaccionProductoId.class)
 @Table(name="transaccion_producto")
-public class Transaccion_producto {
+public class TransaccionProducto {
     @Id
     @ManyToOne
     @JoinColumn(name = "id_transaccion")
-    private Transaccion id_transaccion;
-
+    Transaccion transaccion;
+    @Id
     @ManyToOne
     @JoinColumn(name = "id_producto")
-    private Usuario id_producto;
+    Producto producto;
 
     @Column(name="cantidad")
-    int cantidad;
+    float cantidad;
 
-
-    public Transaccion_producto(){
-
-    }
-
-    public Transaccion_producto(int cantidad){
-        this.cantidad = cantidad;
-
+    public TransaccionProducto(){
 
     }
+
+
 }
