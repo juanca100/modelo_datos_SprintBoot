@@ -1,6 +1,6 @@
 package com.challenge.modelo_de_datos.controller;
 
-import com.challenge.modelo_de_datos.model.Tipo_pago;
+import com.challenge.modelo_de_datos.model.TipoPago;
 import com.challenge.modelo_de_datos.service.TipoPagoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +19,17 @@ public class TipoPagoController {
     }
 
     @GetMapping
-    public List<Tipo_pago> getTiposPago() {
+    public List<TipoPago> getTiposPago() {
         return tipoPagoService.getTiposPago();
     }
 
     @PostMapping
-    public ResponseEntity<Object> addTipoPago(@RequestBody Tipo_pago tipoPago) {
+    public ResponseEntity<Object> addTipoPago(@RequestBody TipoPago tipoPago) {
         return tipoPagoService.newTipoPago(tipoPago);
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateTipoPago(@RequestBody Tipo_pago tipoPago) {
+    public ResponseEntity<Object> updateTipoPago(@RequestBody TipoPago tipoPago) {
         return tipoPagoService.updateTipoPago(tipoPago);
     }
 

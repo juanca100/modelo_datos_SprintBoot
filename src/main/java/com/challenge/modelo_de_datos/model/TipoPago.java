@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="tipo_pago")
-public class Tipo_pago {
+public class TipoPago {
     @Id
     @Column(name = "id_tipo_pago")
     int idTipoPago;
@@ -16,11 +16,11 @@ public class Tipo_pago {
     String tipoPago;
 
 
-    public Tipo_pago(){
+    public TipoPago(){
 
     }
 
-    public Tipo_pago(int idTipoPago, String tipoPago){
+    public TipoPago(int idTipoPago, String tipoPago){
         this.idTipoPago = idTipoPago;
         this.tipoPago = tipoPago;
     }
