@@ -29,7 +29,7 @@ public class UsuarioController {
     }
 
     @PutMapping
-    public ResponseEntity<Object>aupdateUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<Object>updateUsuario(@RequestBody Usuario usuario){
         return this.usuarioService.updateUsuario(usuario);
     }
 
