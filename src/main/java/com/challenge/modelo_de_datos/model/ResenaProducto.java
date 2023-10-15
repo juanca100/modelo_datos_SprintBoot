@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.XSlf4j;
+import org.springframework.data.web.JsonPath;
 
 import java.sql.Date;
 @Getter
@@ -24,8 +25,13 @@ public class ResenaProducto {
     int calificacion_producto;
 
     @ManyToOne
-    @JoinColumn(name="id_producto");
-    private Producto
+    @JoinColumn(name="id_producto")
+    private Producto producto;
+
+    @ManyToOne
+    @JoinColumn(name="id_tipo_producto")
+    private TipoProducto tipoProducto;
+
 
 
 }
