@@ -10,10 +10,10 @@ import lombok.Setter;
 @Table (name="productos")
 public class Producto {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_seq")
-    @SequenceGenerator(name = "productos_seq", sequenceName = "productos_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name="id_producto")
     int IdProducto;
+
     @Column(name="nombre")
     String nombre;
     @Column(name="descripcion")
@@ -25,12 +25,9 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name="id_vendedor")
     Vendedor vendedor;
-
     @ManyToOne
     @JoinColumn(name="id_tipo_producto")
     TipoProducto tipoProducto;
-
-
 
     public Producto() {
     }
