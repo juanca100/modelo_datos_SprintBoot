@@ -1,6 +1,7 @@
 package com.challenge.modelo_de_datos.service;
 
 import com.challenge.modelo_de_datos.model.Estado;
+import com.challenge.modelo_de_datos.model.Pais;
 import com.challenge.modelo_de_datos.repository.EstadoRepository;
 import com.challenge.modelo_de_datos.repository.PaisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,23 +29,33 @@ public class EstadoService {
 
     public ResponseEntity<Object> newEstado(Estado estado) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existePais = this.paisRepository.existsById(estado.getPais().getIdPais());
-        if (existePais) {
-            datos.put("message", "Se guardo con exito");
-            estadoRepository.save(estado);
-            datos.put("data", estado);
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CREATED
-            );
+        Pais pais = estado.getPais();
+        if (pais != null) {
+            boolean existePais = this.paisRepository.existsById(pais.getIdPais());
+            if (existePais) {
+                datos.put("message", "Se guardó con éxito");
+                estadoRepository.save(estado);
+                datos.put("data", estado);
+                return new ResponseEntity<>(
+                        datos,
+                        HttpStatus.CREATED
+                );
+            } else {
+                datos.put("message", "El país no existe");
+                return new ResponseEntity<>(
+                        datos,
+                        HttpStatus.CREATED
+                );
+            }
         } else {
-            datos.put("message", "El pais no existe");
+            datos.put("message", "El objeto Pais en Estado es nulo");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.BAD_REQUEST
             );
         }
     }
+
 
     public ResponseEntity<Object> updateEstado (Estado estado) {
         HashMap<String,Object> datos= new HashMap<>();
