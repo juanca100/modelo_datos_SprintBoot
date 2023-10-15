@@ -1,6 +1,6 @@
 package com.challenge.modelo_de_datos.controller;
 
-import com.challenge.modelo_de_datos.model.Estado_pago;
+import com.challenge.modelo_de_datos.model.EstadoPago;
 import com.challenge.modelo_de_datos.service.EstadoPagoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +19,17 @@ public class EstadoPagoController {
     }
 
     @GetMapping
-    public List<Estado_pago> getEstadosPago() {
+    public List<EstadoPago> getEstadosPago() {
         return estadoPagoService.getEstadosPago();
     }
 
     @PostMapping
-    public ResponseEntity<Object> addEstadoPago(@RequestBody Estado_pago estado_pago) {
+    public ResponseEntity<Object> addEstadoPago(@RequestBody EstadoPago estado_pago) {
         return estadoPagoService.newEstadoPago(estado_pago);
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateEstadoPago(@RequestBody Estado_pago estado_pago) {
+    public ResponseEntity<Object> updateEstadoPago(@RequestBody EstadoPago estado_pago) {
         return estadoPagoService.updateEstadoPago(estado_pago);
     }
 

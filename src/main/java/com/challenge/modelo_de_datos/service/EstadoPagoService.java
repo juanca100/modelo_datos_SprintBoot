@@ -1,6 +1,6 @@
 package com.challenge.modelo_de_datos.service;
 
-import com.challenge.modelo_de_datos.model.Estado_pago;
+import com.challenge.modelo_de_datos.model.EstadoPago;
 import com.challenge.modelo_de_datos.repository.EstadoPagoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,23 +19,23 @@ public class EstadoPagoService {
         this.estadoPagoRepository = estadoPagoRepository;
     }
 
-    public List<Estado_pago> getEstadosPago() {
+    public List<EstadoPago> getEstadosPago() {
         return estadoPagoRepository.findAll();
     }
 
-    public ResponseEntity<Object> newEstadoPago(Estado_pago estado_pago) {
+    public ResponseEntity<Object> newEstadoPago(EstadoPago estado_pago) {
         HashMap<String, Object> datos = new HashMap<>();
-        // Aquí puedes realizar las validaciones necesarias antes de guardar el Estado_pago
-        Estado_pago nuevoEstadoPago = estadoPagoRepository.save(estado_pago);
+        // Aquí puedes realizar las validaciones necesarias antes de guardar el EstadoPago
+        EstadoPago nuevoEstadoPago = estadoPagoRepository.save(estado_pago);
         datos.put("message", "Se guardó con éxito");
         datos.put("data", nuevoEstadoPago);
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Object> updateEstadoPago(Estado_pago estado_pago) {
+    public ResponseEntity<Object> updateEstadoPago(EstadoPago estado_pago) {
         HashMap<String, Object> datos = new HashMap<>();
-        // Aquí puedes realizar las validaciones necesarias antes de actualizar el Estado_pago
-        Estado_pago updatedEstadoPago = estadoPagoRepository.save(estado_pago);
+        // Aquí puedes realizar las validaciones necesarias antes de actualizar el EstadoPago
+        EstadoPago updatedEstadoPago = estadoPagoRepository.save(estado_pago);
         datos.put("message", "Se actualizó con éxito");
         datos.put("data", updatedEstadoPago);
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
@@ -45,11 +45,11 @@ public class EstadoPagoService {
         HashMap<String, Object> datos = new HashMap<>();
         if (!estadoPagoRepository.existsById(id)) {
             datos.put("error", true);
-            datos.put("message", "No existe el Estado_pago con ese ID");
+            datos.put("message", "No existe el EstadoPago con ese ID");
             return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
         }
         estadoPagoRepository.deleteById(id);
-        datos.put("message", "Estado_pago eliminado");
+        datos.put("message", "EstadoPago eliminado");
         return new ResponseEntity<>(datos, HttpStatus.ACCEPTED);
     }
 }
