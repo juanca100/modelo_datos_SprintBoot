@@ -20,8 +20,8 @@ public class TransaccionPago {
     @Column(name = "monto_total")
     float monto_total;
 
-    @Column(name = "descripccion")
-    String descripccion;
+    @Column(name = "descripcion")
+    String descripcion;
 
     @ManyToOne
     @JoinColumn(name = "id_estado_pago")
@@ -38,7 +38,7 @@ public class TransaccionPago {
         this.idTransaccionPago = idTransaccionPago;
         this.transaccion = transaccion;
         this.monto_total = monto_total;
-        this.descripccion = descripccion;
+        this.descripcion = descripccion;
         this.estadoPago = estadoPago;
         this.tipoPago = tipoPago;
     }
