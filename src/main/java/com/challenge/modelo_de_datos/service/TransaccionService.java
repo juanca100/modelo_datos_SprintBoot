@@ -1,6 +1,5 @@
 package com.challenge.modelo_de_datos.service;
 
-import com.challenge.modelo_de_datos.model.Comprador;
 import com.challenge.modelo_de_datos.model.Transaccion;
 import com.challenge.modelo_de_datos.repository.CompradorRepository;
 import com.challenge.modelo_de_datos.repository.TransaccionRepository;

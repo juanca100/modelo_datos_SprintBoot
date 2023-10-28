@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "usuarios")
+@RequestMapping(path = "api/v1/Usuario")
 public class UsuarioController {
     private final UsuarioService usuarioService;
 
@@ -28,12 +28,12 @@ public class UsuarioController {
         return this.usuarioService.newUsuario(usuario);
     }
 
-    @PutMapping
-    public ResponseEntity<Object>updateUsuario(@RequestBody Usuario usuario){
-        return this.usuarioService.updateUsuario(usuario);
+    @PutMapping("/update/{idUsuario}")
+    public ResponseEntity<Object>updateUsuario(@PathVariable("idUsuario") Integer id,@RequestBody Usuario usuario){
+        return this.usuarioService.updateUsuario(id,usuario);
     }
 
-    @DeleteMapping(path="{idUsuario}")
+    @DeleteMapping(path="/delete/{idUsuario}")
     public ResponseEntity<Object> deleteUsuario(@PathVariable("idUsuario") Integer id){
         return this.usuarioService.deleteUsuario(id);
     }

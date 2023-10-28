@@ -35,14 +35,23 @@ public class UsuarioService {
         );
     }
 
-    public ResponseEntity<Object> updateUsuario(Usuario usuario) {
+    public ResponseEntity<Object> updateUsuario(Integer id,Usuario usuario) {
         HashMap<String,Object> datos= new HashMap<>();
-        datos.put("message","Se actualizo con exito");
-        usuarioRepository.save(usuario);
-        datos.put("data",usuario);
+        boolean existeUsuario = this.usuarioRepository.existsById(id);
+        if(existeUsuario){
+            datos.put("message","Se actualizo con exito");
+            usuarioRepository.save(usuario);
+            datos.put("data",usuario);
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CREATED
+            );
+        }
+        datos.put("error",true);
+        datos.put("message","No existe la categoria con ese id");
         return new ResponseEntity<>(
                 datos,
-                HttpStatus.CREATED
+                HttpStatus.CONFLICT
         );
     }
 

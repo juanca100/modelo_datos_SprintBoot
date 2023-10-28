@@ -1,8 +1,6 @@
 package com.challenge.modelo_de_datos.service;
-import com.challenge.modelo_de_datos.model.Producto;
-import com.challenge.modelo_de_datos.model.ResenaProducto;
+
 import com.challenge.modelo_de_datos.model.ResenaTienda;
-import com.challenge.modelo_de_datos.model.Transaccion;
 import com.challenge.modelo_de_datos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
