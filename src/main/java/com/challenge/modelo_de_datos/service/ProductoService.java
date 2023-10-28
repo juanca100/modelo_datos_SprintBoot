@@ -59,6 +59,7 @@ public class ProductoService {
         boolean existeProducto=this.productoRepository.existsById(id);
         if(existeProducto){
             if(existeVendedor){
+                producto.setIdProducto(id);
                 datos.put("message","Se actualizo con exito");
                 productoRepository.save(producto);
                 datos.put("data",producto);

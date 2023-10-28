@@ -52,6 +52,7 @@ public class CiudadService {
         boolean existeCiudad=this.ciudadRepository.existsById(id);
         if(existeCiudad){
             if(existeEstado){
+                ciudad.setIdCiudad(id);
                 datos.put("message","Se actualizo con exito");
                 ciudadRepository.save(ciudad);
                 datos.put("data",ciudad);

@@ -46,6 +46,7 @@ public class PaisService {
                     HttpStatus.CONFLICT
             );
         }
+        pais.setIdPais(id);
         datos.put("message","Se actualizo con exito");
         paisRepository.save(pais);
         datos.put("data",pais);

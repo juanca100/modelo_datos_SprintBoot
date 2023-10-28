@@ -46,6 +46,7 @@ public class UsuarioService {
                     HttpStatus.CONFLICT
             );
         }
+        usuario.setIdUsuario(id);
         datos.put("message","Se actualizo el usuario");
         usuarioRepository.save(usuario);
         datos.put("data",usuario);

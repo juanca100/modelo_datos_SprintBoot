@@ -45,6 +45,7 @@ public class CategoriaService {
                     HttpStatus.CONFLICT
             );
         }
+        categoria.setIdCategoria(id);
         datos.put("message","Se actualizo con exito");
         categoriaRepository.save(categoria);
         datos.put("data",categoria);

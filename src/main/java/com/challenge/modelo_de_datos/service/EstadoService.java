@@ -63,6 +63,7 @@ public class EstadoService {
         boolean existePais = this.paisRepository.existsById(estado.getPais().getIdPais());
         if(existeEstado){
             if(existePais){
+                estado.setIdEstado(id);
                 datos.put("message","Se actualizo con exito");
                 estadoRepository.save(estado);
                 datos.put("data",estado);

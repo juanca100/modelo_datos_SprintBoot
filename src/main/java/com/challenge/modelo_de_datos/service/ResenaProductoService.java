@@ -75,6 +75,7 @@ public class ResenaProductoService {
                             HttpStatus.CONFLICT
                     );
                 }
+                resenaProducto.setIdResenaProducto(id);
                 datos.put("message","Se actuaslizo con exito");
                 resenaProductoRepository.save(resenaProducto);
                 datos.put("data",resenaProducto);

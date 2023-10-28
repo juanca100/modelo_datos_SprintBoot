@@ -39,6 +39,7 @@ public class TransaccionPagoService {
             datos.put("message", "No existe la TransaccionPago con ese ID");
             return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
         }
+        transaccionPago.setIdTransaccionPago(id);
         TransaccionPago updatedTransaccionPago = transaccionPagoRepository.save(transaccionPago);
         datos.put("message", "Se actualizó con éxito");
         datos.put("data", updatedTransaccionPago);

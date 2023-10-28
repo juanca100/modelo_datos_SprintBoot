@@ -76,6 +76,7 @@ public class TransaccionService {
                             HttpStatus.CONFLICT
                     );
                 }
+                transaccion.setIdTransaccion(id);
                 datos.put("message","Se actualizo con exito");
                 transaccionRepository.save(transaccion);
                 datos.put("data",transaccion);

@@ -39,6 +39,7 @@ public class TipoPagoService {
             datos.put("message", "No existe el TipoPago con ese ID");
             return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
         }
+        tipoPago.setIdTipoPago(id);
         TipoPago updatedTipoPago = tipoPagoRepository.save(tipoPago);
         datos.put("message", "Se actualizó con éxito");
         datos.put("data", updatedTipoPago);

@@ -74,6 +74,7 @@ public class NotificacionService {
                             HttpStatus.CONFLICT
                     );
                 }
+                notificacion.setIdNotificacion(id);
                 datos.put("message","Se actualizo con exito");
                 notificacionRepository.save(notificacion);
                 datos.put("data",notificacion);

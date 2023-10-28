@@ -50,7 +50,6 @@ public class TipoProductoService {
         HashMap<String,Object> datos= new HashMap<>();
         boolean existe=this.CategoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria());
         boolean existeTP=this.TipoProductoRepository.existsById(id);
-       // tipoProducto.setIdTipoProducto(id);
         if(existe){
             if(!existeTP){
                 datos.put("error",true);
@@ -60,6 +59,7 @@ public class TipoProductoService {
                         HttpStatus.CONFLICT
                 );
             }
+            tipoProducto.setIdTipoProducto(id);
             datos.put("message","Se actualizo con exito");
             TipoProductoRepository.save(tipoProducto);
             datos.put("data",tipoProducto);

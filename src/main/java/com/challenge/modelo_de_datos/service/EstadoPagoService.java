@@ -40,6 +40,7 @@ public class EstadoPagoService {
             datos.put("message", "No existe el EstadoPago con ese ID");
             return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
         }
+        estado_pago.setIdEstadoPago(id);
         EstadoPago updatedEstadoPago = estadoPagoRepository.save(estado_pago);
         datos.put("message", "Se actualizó con éxito");
         datos.put("data", updatedEstadoPago);

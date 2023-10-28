@@ -45,6 +45,7 @@ public class TipoNotificacionService {
                     HttpStatus.CONFLICT
             );
         }
+        tiponotificacion.setIdTipoNotificacion(id);
         datos.put("message","Se actualizo con exito");
         tipoNotificacionRepository.save(tiponotificacion);
         datos.put("data",tiponotificacion);

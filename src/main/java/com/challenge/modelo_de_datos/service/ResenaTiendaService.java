@@ -73,6 +73,7 @@ public class ResenaTiendaService {
                             HttpStatus.CONFLICT
                     );
                 }
+                resenaTienda.setIdResenaTienda(id);
                 datos.put("message","Se actualizo con exito");
                 resenaTiendaRepository.save(resenaTienda);
                 datos.put("data",resenaTienda);

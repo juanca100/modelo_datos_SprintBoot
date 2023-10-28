@@ -76,6 +76,7 @@ public class CompradorService{
                                 HttpStatus.CONFLICT
                         );
                     }
+                    comprador.setIdComprador(id);
                     datos.put("message","Se guardo con exito");
                     CompradorRepository.save(comprador);
                     datos.put("data",comprador);
