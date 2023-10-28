@@ -24,7 +24,7 @@ public class NotificacionService {
         this.tipoNotificacionRepository = tipoNotificacionRepository;
     }
 
-    public List<Notificacion> getNotificacion(){
+    public List<Notificacion> getNotificaciones(){
         return this.notificacionRepository.findAll();
     }
 
@@ -59,12 +59,21 @@ public class NotificacionService {
         }
     }
 
-    public ResponseEntity<Object> updateNotificacion(Notificacion notificacion) {
+    public ResponseEntity<Object> updateNotificacion(Integer id,Notificacion notificacion) {
         HashMap<String,Object> datos= new HashMap<>();
         boolean existeTipoN=this.tipoNotificacionRepository.existsById(notificacion.getTipoNotificacion().getIdTipoNotificacion());
         boolean existeUsuario=this.usuarioRepository.existsById(notificacion.getUsuario().getIdUsuario());
+        boolean existeNotificacion=this.notificacionRepository.existsById(id);
         if(existeTipoN){
             if(existeUsuario){
+                if(!existeNotificacion){
+                    datos.put("error",true);
+                    datos.put("message","No hay notificacion con ese id");
+                    return new ResponseEntity<>(
+                            datos,
+                            HttpStatus.CONFLICT
+                    );
+                }
                 datos.put("message","Se actualizo con exito");
                 notificacionRepository.save(notificacion);
                 datos.put("data",notificacion);
@@ -74,26 +83,28 @@ public class NotificacionService {
                 );
             }
             else{
+                datos.put("error",true);
                 datos.put("message","El usuario no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
         else{
+            datos.put("error",true);
             datos.put("message","El tipo de notificacion no existe");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
     }
 
     public ResponseEntity<Object> deleteNotificacion(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.notificacionRepository.existsById(id);
-        if(!existe){
+        boolean existeNotificacion=this.notificacionRepository.existsById(id);
+        if(!existeNotificacion){
             datos.put("error",true);
             datos.put("message","No hay notificacion con ese id");
             return new ResponseEntity<>(
@@ -109,4 +120,3 @@ public class NotificacionService {
         );
     }
 }
-

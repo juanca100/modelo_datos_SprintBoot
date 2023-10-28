@@ -1,8 +1,6 @@
 package com.challenge.modelo_de_datos.service;
 
-import com.challenge.modelo_de_datos.model.Producto;
 import com.challenge.modelo_de_datos.model.ResenaProducto;
-import com.challenge.modelo_de_datos.model.Transaccion;
 import com.challenge.modelo_de_datos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +25,7 @@ public class ResenaProductoService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public List<ResenaProducto> getResenaProducto(){
+    public List<ResenaProducto> getResenasProducto(){
         return this.resenaProductoRepository.findAll();
     }
 
@@ -62,12 +60,21 @@ public class ResenaProductoService {
         //}
     }
 
-    public ResponseEntity<Object> updateResenaProducto(ResenaProducto resenaProducto) {
+    public ResponseEntity<Object> updateResenaProducto(Integer id,ResenaProducto resenaProducto) {
         HashMap<String,Object> datos= new HashMap<>();
         boolean existeProducto=this.productoRepository.existsById(resenaProducto.getProducto().getIdProducto());
         boolean existeUsuario=this.usuarioRepository.existsById(resenaProducto.getProducto().getIdProducto());
+        boolean existeResenaProducto=this.resenaProductoRepository.existsById(id);
         if(existeProducto){
             if(existeUsuario){
+                if(!existeResenaProducto){
+                    datos.put("error",true);
+                    datos.put("message","No hay Resena de Producto con ese id");
+                    return new ResponseEntity<>(
+                            datos,
+                            HttpStatus.CONFLICT
+                    );
+                }
                 datos.put("message","Se actuaslizo con exito");
                 resenaProductoRepository.save(resenaProducto);
                 datos.put("data",resenaProducto);
@@ -75,12 +82,14 @@ public class ResenaProductoService {
                         datos,
                         HttpStatus.CREATED
                 );
+
+
             }
             else{
                 datos.put("message","El usuario no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
@@ -88,15 +97,15 @@ public class ResenaProductoService {
             datos.put("message","El producto no existe");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
     }
 
     public ResponseEntity<Object> deleteResenaProducto(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.resenaProductoRepository.existsById(id);
-        if(!existe){
+        boolean existeRP=this.resenaProductoRepository.existsById(id);
+        if(!existeRP){
             datos.put("error",true);
             datos.put("message","No hay resenaProducto con ese id");
             return new ResponseEntity<>(

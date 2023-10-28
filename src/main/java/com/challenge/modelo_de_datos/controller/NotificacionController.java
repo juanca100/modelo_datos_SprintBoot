@@ -5,11 +5,10 @@ import com.challenge.modelo_de_datos.service.NotificacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "Notificaciones")
+@RequestMapping(path = "api/v1/Notificacion")
 public class NotificacionController {
     private final NotificacionService notificacionService;
 
@@ -20,20 +19,20 @@ public class NotificacionController {
 
     @GetMapping
     public List<Notificacion> getNotificaciones(){
-        return this.notificacionService.getNotificacion();
+        return this.notificacionService.getNotificaciones();
     }
 
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addNotificacion(@RequestBody Notificacion notificacion){
         return this.notificacionService.newNotificacion(notificacion);
     }
 
-    @PutMapping
-    public ResponseEntity<Object>updateNotificacion(@RequestBody Notificacion notificacion){
-        return this.notificacionService.updateNotificacion(notificacion);
+    @PutMapping(path="/Update/{idNotificacion}")
+    public ResponseEntity<Object>updateNotificacion(@PathVariable("idNotificacion") Integer id,@RequestBody Notificacion notificacion){
+        return this.notificacionService.updateNotificacion(id,notificacion);
     }
 
-    @DeleteMapping(path="{idNotificacion}")
+    @DeleteMapping(path="/Delete/{idNotificacion}")
     public ResponseEntity<Object> deleteTipoN(@PathVariable("idNotificacion") Integer id){
         return this.notificacionService.deleteNotificacion(id);
     }

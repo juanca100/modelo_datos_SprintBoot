@@ -35,8 +35,17 @@ public class PaisService {
         );
     }
 
-    public ResponseEntity<Object> updatePais(Pais pais) {
+    public ResponseEntity<Object> updatePais(Integer id,Pais pais) {
         HashMap<String,Object> datos= new HashMap<>();
+        boolean existePais=this.paisRepository.existsById(id);
+        if(!existePais){
+            datos.put("error",true);
+            datos.put("message","No existe el pais con ese id");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
         datos.put("message","Se actualizo con exito");
         paisRepository.save(pais);
         datos.put("data",pais);
@@ -48,8 +57,8 @@ public class PaisService {
 
     public ResponseEntity<Object> deletePais(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.paisRepository.existsById(id);
-        if(!existe){
+        boolean existePais=this.paisRepository.existsById(id);
+        if(!existePais){
             datos.put("error",true);
             datos.put("message","No existe el pais con ese id");
             return new ResponseEntity<>(

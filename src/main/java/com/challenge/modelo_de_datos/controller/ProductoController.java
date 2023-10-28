@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "productos")
+@RequestMapping(path = "api/v1/Producto")
 public class ProductoController {
     private final ProductoService productoService;
 
@@ -21,14 +21,14 @@ public class ProductoController {
     public List<Producto> getProductos(){
         return this.productoService.getProductos();
     }
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addProducto(@RequestBody Producto producto){return this.productoService.newProducto(producto);}
 
-    @PutMapping
-    public  ResponseEntity<Object> updateProducto(@RequestBody Producto producto){
-        return this.productoService.updateProducto(producto);
+    @PutMapping(path="/Update/{idProducto}")
+    public  ResponseEntity<Object> updateProducto(@PathVariable("idProducto") Integer id,@RequestBody Producto producto){
+        return this.productoService.updateProducto(id,producto);
     }
-    @DeleteMapping(path="{idProducto}")
+    @DeleteMapping(path="/Delete/{idProducto}")
     public  ResponseEntity<Object> deleteProducto(@PathVariable("idProducto") Integer id){
         return  this.productoService.deleteProducto(id);
     }

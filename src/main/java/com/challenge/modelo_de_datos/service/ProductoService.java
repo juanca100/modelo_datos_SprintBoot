@@ -53,10 +53,10 @@ public class ProductoService {
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Object> updateProducto (Producto producto){
+    public ResponseEntity<Object> updateProducto (Integer id,Producto producto){
         HashMap<String,Object> datos= new HashMap<>();
         boolean existeVendedor=this.productoRepository.existsById(producto.getVendedor().getIdVendedor());
-        boolean existeProducto=this.productoRepository.existsById(producto.getIdProducto());
+        boolean existeProducto=this.productoRepository.existsById(id);
         if(existeProducto){
             if(existeVendedor){
                 datos.put("message","Se actualizo con exito");
@@ -71,7 +71,7 @@ public class ProductoService {
                 datos.put("message","El vendedor no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
@@ -79,7 +79,7 @@ public class ProductoService {
             datos.put("message","el producto no existe");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
     }

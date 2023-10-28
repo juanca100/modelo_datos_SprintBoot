@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "Pais")
+@RequestMapping(path = "api/v1/Pais")
 public class PaisController {
     private final PaisService paisService;
 
@@ -23,17 +23,17 @@ public class PaisController {
         return this.paisService.getPaises();
     }
 
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addPais(@RequestBody Pais pais){
         return this.paisService.newPais(pais);
     }
 
-    @PutMapping
-    public ResponseEntity<Object>updatePais(@RequestBody Pais pais){
-        return this.paisService.updatePais(pais);
+    @PutMapping(path="/Update/{idPais}")
+    public ResponseEntity<Object>updatePais(@PathVariable("idPais") Integer id,@RequestBody Pais pais){
+        return this.paisService.updatePais(id,pais);
     }
 
-    @DeleteMapping(path="{idPais}")
+    @DeleteMapping(path="/Delete/{idPais}")
     public ResponseEntity<Object> deletePais(@PathVariable("idPais") Integer id){
         return this.paisService.deletePais(id);
     }
