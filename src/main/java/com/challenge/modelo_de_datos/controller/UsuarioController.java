@@ -23,17 +23,17 @@ public class UsuarioController {
         return this.usuarioService.getUsuarios();
     }
 
-    @PostMapping
+    @PostMapping("/Create")
     public ResponseEntity<Object>addUsuario(@RequestBody Usuario usuario){
         return this.usuarioService.newUsuario(usuario);
     }
 
-    @PutMapping("/update/{idUsuario}")
+    @PutMapping("/Update/{idUsuario}")
     public ResponseEntity<Object>updateUsuario(@PathVariable("idUsuario") Integer id,@RequestBody Usuario usuario){
         return this.usuarioService.updateUsuario(id,usuario);
     }
 
-    @DeleteMapping(path="/delete/{idUsuario}")
+    @DeleteMapping(path="/Delete/{idUsuario}")
     public ResponseEntity<Object> deleteUsuario(@PathVariable("idUsuario") Integer id){
         return this.usuarioService.deleteUsuario(id);
     }
