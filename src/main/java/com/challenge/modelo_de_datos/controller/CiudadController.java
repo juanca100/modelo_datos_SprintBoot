@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "Ciudad")
+@RequestMapping(path = "api/v1/Ciudad")
 public class CiudadController {
     private final CiudadService ciudadService;
 
@@ -23,17 +23,17 @@ public class CiudadController {
         return this.ciudadService.getCiudades();
     }
 
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addCiudad(@RequestBody Ciudad ciudad){
         return this.ciudadService.newCiudad(ciudad);
     }
 
-    @PutMapping
-    public ResponseEntity<Object>updateCiudad(@RequestBody Ciudad ciudad){
-        return this.ciudadService.updateCiudad(ciudad);
+    @PutMapping(path="/Update/{idCiudad}")
+    public ResponseEntity<Object>updateCiudad(@PathVariable("idCiudad") Integer id,@RequestBody Ciudad ciudad){
+        return this.ciudadService.updateCiudad(id,ciudad);
     }
 
-    @DeleteMapping(path="{idCiudad}")
+    @DeleteMapping(path="/Delete/{idCiudad}")
     public ResponseEntity<Object> deleteCiudad(@PathVariable("idCiudad") Integer id){
         return this.ciudadService.deleteCiudad(id);
     }

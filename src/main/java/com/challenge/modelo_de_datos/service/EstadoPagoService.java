@@ -32,9 +32,14 @@ public class EstadoPagoService {
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Object> updateEstadoPago(EstadoPago estado_pago) {
+    public ResponseEntity<Object> updateEstadoPago(Integer id,EstadoPago estado_pago) {
         HashMap<String, Object> datos = new HashMap<>();
-        // Aquí puedes realizar las validaciones necesarias antes de actualizar el EstadoPago
+        boolean existePagoEstado=estadoPagoRepository.existsById(id);
+        if(!existePagoEstado){
+            datos.put("error", true);
+            datos.put("message", "No existe el EstadoPago con ese ID");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+        }
         EstadoPago updatedEstadoPago = estadoPagoRepository.save(estado_pago);
         datos.put("message", "Se actualizó con éxito");
         datos.put("data", updatedEstadoPago);

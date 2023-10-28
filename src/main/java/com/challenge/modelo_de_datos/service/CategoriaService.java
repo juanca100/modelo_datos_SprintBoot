@@ -34,8 +34,17 @@ public class CategoriaService {
         );
     }
 
-    public ResponseEntity<Object> updateCategoria(Categoria categoria) {
+    public ResponseEntity<Object> updateCategoria(Integer id,Categoria categoria) {
         HashMap<String,Object> datos= new HashMap<>();
+        boolean existeCategoria=this.categoriaRepository.existsById(id);
+        if(!existeCategoria){
+            datos.put("error",true);
+            datos.put("message","No existe la categoria con ese id");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
         datos.put("message","Se actualizo con exito");
         categoriaRepository.save(categoria);
         datos.put("data",categoria);
@@ -47,8 +56,8 @@ public class CategoriaService {
 
     public ResponseEntity<Object> deleteCategoria(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.categoriaRepository.existsById(id);
-        if(!existe){
+        boolean existeCategoria=this.categoriaRepository.existsById(id);
+        if(!existeCategoria){
             datos.put("error",true);
             datos.put("message","No existe la categoria con ese id");
             return new ResponseEntity<>(

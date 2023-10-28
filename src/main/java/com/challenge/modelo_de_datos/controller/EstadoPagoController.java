@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "estado_pago")
+@RequestMapping(path = "api/v1/EstadoPago")
 public class EstadoPagoController {
     private final EstadoPagoService estadoPagoService;
 
@@ -23,18 +23,18 @@ public class EstadoPagoController {
         return estadoPagoService.getEstadosPago();
     }
 
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addEstadoPago(@RequestBody EstadoPago estado_pago) {
         return estadoPagoService.newEstadoPago(estado_pago);
     }
 
-    @PutMapping
-    public ResponseEntity<Object> updateEstadoPago(@RequestBody EstadoPago estado_pago) {
-        return estadoPagoService.updateEstadoPago(estado_pago);
+    @PutMapping(path = "/Update/{idEstadoPago}")
+    public ResponseEntity<Object> updateEstadoPago(@PathVariable("idEstadoPago") Integer id,@RequestBody EstadoPago estado_pago) {
+        return estadoPagoService.updateEstadoPago(id,estado_pago);
     }
 
-    @DeleteMapping(path = "{idEstadoPago}")
-    public ResponseEntity<Object> deleteEstadoPago(@PathVariable("idEstadoPago") int id) {
+    @DeleteMapping(path = "/Delete/{idEstadoPago}")
+    public ResponseEntity<Object> deleteEstadoPago(@PathVariable("idEstadoPago") Integer id) {
         return estadoPagoService.deleteEstadoPago(id);
     }
 }

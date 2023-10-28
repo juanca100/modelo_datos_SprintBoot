@@ -1,6 +1,5 @@
 package com.challenge.modelo_de_datos.service;
 
-import com.challenge.modelo_de_datos.model.Estado;
 import com.challenge.modelo_de_datos.model.Inventario;
 import com.challenge.modelo_de_datos.repository.InventarioRepository;
 import com.challenge.modelo_de_datos.repository.ProductoRepository;
@@ -22,7 +21,7 @@ public class InventarioService {
         this.inventarioRepository = inventarioRepository;
         this.productoRepository = productoRepository;
     }
-    public List<Inventario> getInventario(){
+    public List<Inventario> getInventarios(){
         return this.inventarioRepository.findAll();
     }
     public ResponseEntity<Object> newInventario(Inventario inventario){
@@ -44,12 +43,12 @@ public class InventarioService {
             );
         }
     }
-    public ResponseEntity<Object> updateInventario (Inventario inventario) {
+    public ResponseEntity<Object> updateInventario (Integer id,Inventario inventario) {
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existeInventario=this.inventarioRepository.existsById(inventario.getIdInventario());
-        boolean existePais = this.productoRepository.existsById(inventario.getProducto().getIdProducto());
+        boolean existeInventario=this.inventarioRepository.existsById(id);
+        boolean existeProducto = this.productoRepository.existsById(inventario.getProducto().getIdProducto());
         if(existeInventario){
-            if(existePais){
+            if(existeProducto){
                 datos.put("message","Se actualizo con exito");
                 inventarioRepository.save(inventario);
                 datos.put("data",inventario);
@@ -62,32 +61,32 @@ public class InventarioService {
                 datos.put("message","El id de producto no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
         else{
-            datos.put("message","El inventario no existe");
+            datos.put("message","El inventario con ese id no existe");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
     }
 
     public ResponseEntity<Object> deleteInventario(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.inventarioRepository.existsById(id);
-        if(!existe){
+        boolean existeInventario=this.inventarioRepository.existsById(id);
+        if(!existeInventario){
             datos.put("error",true);
-            datos.put("message","No existe estado con ese id");
+            datos.put("message","No existe el inventario con ese id");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CONFLICT
             );
         }
         inventarioRepository.deleteById(id);
-        datos.put("message","Estado eliminado");
+        datos.put("message","Inventario eliminado");
         return new ResponseEntity<>(
                 datos,
                 HttpStatus.ACCEPTED

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "categorias")
+@RequestMapping(path = "api/v1/Categoria")
 public class CategoriaController {
     private final CategoriaService categoriaService;
 
@@ -23,17 +23,17 @@ public class CategoriaController {
         return this.categoriaService.getCategorias();
     }
 
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addCategoria(@RequestBody Categoria categoria){
         return this.categoriaService.newCategoria(categoria);
     }
 
-    @PutMapping
-    public ResponseEntity<Object>updateCategoria(@RequestBody Categoria categoria){
-        return this.categoriaService.updateCategoria(categoria);
+    @PutMapping(path="/Update/{idCategoria}")
+    public ResponseEntity<Object>updateCategoria(@PathVariable("idCategoria") Integer id,@RequestBody Categoria categoria){
+        return this.categoriaService.updateCategoria(id,categoria);
     }
 
-    @DeleteMapping(path="{idCategoria}")
+    @DeleteMapping(path="/Delete/{idCategoria}")
     public ResponseEntity<Object> deleteCategoria(@PathVariable("idCategoria") Integer id){
         return this.categoriaService.deleteCategoria(id);
     }

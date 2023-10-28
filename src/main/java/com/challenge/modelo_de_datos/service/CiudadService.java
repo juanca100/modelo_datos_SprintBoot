@@ -46,10 +46,10 @@ public class CiudadService {
         }
     }
 
-    public ResponseEntity<Object> updateCiudad (Ciudad ciudad) {
+    public ResponseEntity<Object> updateCiudad (Integer id,Ciudad ciudad) {
         HashMap<String,Object> datos= new HashMap<>();
         boolean existeEstado=this.estadoRepository.existsById(ciudad.getEstado().getIdEstado());
-        boolean existeCiudad=this.ciudadRepository.existsById(ciudad.getIdCiudad());
+        boolean existeCiudad=this.ciudadRepository.existsById(id);
         if(existeCiudad){
             if(existeEstado){
                 datos.put("message","Se actualizo con exito");
@@ -61,26 +61,26 @@ public class CiudadService {
                 );
             }
             else{
-                datos.put("message","El estado no existe");
+                datos.put("message","El estado con ese no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
         else{
-            datos.put("message","La ciudad no existe");
+            datos.put("message","No existe ciudad con ese ID");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
     }
 
     public ResponseEntity<Object> deleteCiudad(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.ciudadRepository.existsById(id);
-        if(!existe){
+        boolean existeCiudad=this.ciudadRepository.existsById(id);
+        if(!existeCiudad){
             datos.put("error",true);
             datos.put("message","No existe la ciudad con ese id");
             return new ResponseEntity<>(

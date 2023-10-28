@@ -7,14 +7,12 @@ import com.challenge.modelo_de_datos.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 
-@RestController
-@RequestMapping(path = "compradores")
+@Service
 public class CompradorService{
         private final CompradorRepository CompradorRepository;
         private final CiudadRepository CiudadRepository;
@@ -63,12 +61,21 @@ public class CompradorService{
             }
         }
 
-        public ResponseEntity<Object> updateComprador(Comprador comprador) {
+        public ResponseEntity<Object> updateComprador(Integer id,Comprador comprador) {
             HashMap<String,Object> datos= new HashMap<>();
             boolean existeUsuario=this.UsuarioRepository.existsById(comprador.getUsuario().getIdUsuario());
             boolean existeCiudad=this.CiudadRepository.existsById(comprador.getCiudad().getIdCiudad());
+            boolean existeComprador=this.CompradorRepository.existsById(id);
             if(existeUsuario){
                 if(existeCiudad){
+                    if(!existeComprador){
+                        datos.put("error",true);
+                        datos.put("message","No existe el comprador con ese id");
+                        return new ResponseEntity<>(
+                                datos,
+                                HttpStatus.CONFLICT
+                        );
+                    }
                     datos.put("message","Se guardo con exito");
                     CompradorRepository.save(comprador);
                     datos.put("data",comprador);
@@ -81,7 +88,7 @@ public class CompradorService{
                     datos.put("message","La ciudad no existe");
                     return new ResponseEntity<>(
                             datos,
-                            HttpStatus.CREATED
+                            HttpStatus.CONFLICT
                     );
                 }
             }
@@ -89,15 +96,15 @@ public class CompradorService{
                 datos.put("message","El usuario no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
 
-        public ResponseEntity<Object> deleteComprados(Integer id){
+        public ResponseEntity<Object> deleteComprador(Integer id){
             HashMap<String,Object> datos= new HashMap<>();
-            boolean existe=this.CompradorRepository.existsById(id);
-            if(!existe){
+            boolean existeComprador=this.CompradorRepository.existsById(id);
+            if(!existeComprador){
                 datos.put("error",true);
                 datos.put("message","No existe el comprador con ese id");
                 return new ResponseEntity<>(

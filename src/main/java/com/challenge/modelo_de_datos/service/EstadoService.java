@@ -48,7 +48,7 @@ public class EstadoService {
                 );
             }
         } else {
-            datos.put("message", "El objeto Pais en Estado es nulo");
+            datos.put("message", "El Pais en Estado es nulo");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.BAD_REQUEST
@@ -57,9 +57,9 @@ public class EstadoService {
     }
 
 
-    public ResponseEntity<Object> updateEstado (Estado estado) {
+    public ResponseEntity<Object> updateEstado (Integer id,Estado estado) {
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existeEstado=this.estadoRepository.existsById(estado.getIdEstado());
+        boolean existeEstado=this.estadoRepository.existsById(id);
         boolean existePais = this.paisRepository.existsById(estado.getPais().getIdPais());
         if(existeEstado){
             if(existePais){
@@ -75,7 +75,7 @@ public class EstadoService {
                 datos.put("message","El id de pais no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
@@ -83,15 +83,15 @@ public class EstadoService {
             datos.put("message","El estado no existe");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
     }
 
     public ResponseEntity<Object> deleteEstado(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.estadoRepository.existsById(id);
-        if(!existe){
+        boolean existeEstado=this.estadoRepository.existsById(id);
+        if(!existeEstado){
             datos.put("error",true);
             datos.put("message","No existe estado con ese id");
             return new ResponseEntity<>(

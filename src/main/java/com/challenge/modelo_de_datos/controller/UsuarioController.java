@@ -23,12 +23,12 @@ public class UsuarioController {
         return this.usuarioService.getUsuarios();
     }
 
-    @PostMapping("/Create")
+    @PostMapping(path="/Create")
     public ResponseEntity<Object>addUsuario(@RequestBody Usuario usuario){
         return this.usuarioService.newUsuario(usuario);
     }
 
-    @PutMapping("/Update/{idUsuario}")
+    @PutMapping(path="/Update/{idUsuario}")
     public ResponseEntity<Object>updateUsuario(@PathVariable("idUsuario") Integer id,@RequestBody Usuario usuario){
         return this.usuarioService.updateUsuario(id,usuario);
     }
