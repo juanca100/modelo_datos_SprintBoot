@@ -63,12 +63,21 @@ public class VendedorService {
         }
     }
 
-    public ResponseEntity<Object> updateVendedor(Vendedor vendedor) {
+    public ResponseEntity<Object> updateVendedor(Integer id,Vendedor vendedor) {
         HashMap<String,Object> datos= new HashMap<>();
         boolean existeUsuario=this.UsuarioRepository.existsById(vendedor.getUsuario().getIdUsuario());
         boolean existeCiudad=this.CiudadRepository.existsById(vendedor.getCiudad().getIdCiudad());
+        boolean existeVendedor=this.VendedorRepository.existsById(id);
         if(existeUsuario){
             if(existeCiudad){
+                if(!existeVendedor){
+                    datos.put("error",true);
+                    datos.put("message","No existe el tipo de producto con ese id");
+                    return new ResponseEntity<>(
+                            datos,
+                            HttpStatus.CONFLICT
+                    );
+                }
                 datos.put("message","Se actualizo con exito");
                 VendedorRepository.save(vendedor);
                 datos.put("data",vendedor);
@@ -81,7 +90,7 @@ public class VendedorService {
                 datos.put("message","La ciudad no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
@@ -89,15 +98,15 @@ public class VendedorService {
             datos.put("message","El usuario no existe");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
     }
 
     public ResponseEntity<Object> deleteVendedor(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.VendedorRepository.existsById(id);
-        if(!existe){
+        boolean existeVendedor=this.VendedorRepository.existsById(id);
+        if(!existeVendedor){
             datos.put("error",true);
             datos.put("message","No existe el tipo de producto con ese id");
             return new ResponseEntity<>(

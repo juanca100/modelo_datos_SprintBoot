@@ -5,11 +5,10 @@ import com.challenge.modelo_de_datos.service.TipoNotificacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "TiposNotificaciones")
+@RequestMapping(path = "api/v1/TipoNotificacion")
 public class TipoNotificacionController {
     private final TipoNotificacionService tipoNotificacionService;
 
@@ -23,22 +22,18 @@ public class TipoNotificacionController {
         return this.tipoNotificacionService.getTiposNotificaciones();
     }
 
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addTipoN(@RequestBody TipoNotificacion tipoN){
         return this.tipoNotificacionService.newTipoNotificacion(tipoN);
     }
 
-    @PutMapping
-    public ResponseEntity<Object>updateTipoN(@RequestBody TipoNotificacion tipoN){
-        return this.tipoNotificacionService.updateTipoNotificacion(tipoN);
+    @PutMapping(path="/Update/{idTipoNotificacion}")
+    public ResponseEntity<Object>updateTipoN(@PathVariable("idTipoNotificacion") Integer id,@RequestBody TipoNotificacion tipoN){
+        return this.tipoNotificacionService.updateTipoNotificacion(id,tipoN);
     }
 
-    @DeleteMapping(path="{idTipoN}")
-    public ResponseEntity<Object> deleteTipoN(@PathVariable("idTipoN") Integer id){
+    @DeleteMapping(path="/Delete/{idTipoNotificacion}")
+    public ResponseEntity<Object> deleteTipoN(@PathVariable("idTipoNotificacion") Integer id){
         return this.tipoNotificacionService.deleteTipoNotificacion(id);
     }
 }
-
-
-
-

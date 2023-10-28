@@ -5,11 +5,10 @@ import com.challenge.modelo_de_datos.service.TransaccionProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "transaccion_producto")
+@RequestMapping(path = "api/v1/TransaccionProducto")
 public class TransaccionProductoController {
     private final TransaccionProductoService transaccionProductoService;
 
@@ -23,18 +22,18 @@ public class TransaccionProductoController {
         return transaccionProductoService.getTransaccionesProducto();
     }
 
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addTransaccionProducto(@RequestBody TransaccionProducto transaccionProducto) {
         return transaccionProductoService.newTransaccionProducto(transaccionProducto);
     }
 
-    @PutMapping
-    public ResponseEntity<Object> updateTransaccionProducto(@RequestBody TransaccionProducto transaccionProducto) {
-        return transaccionProductoService.updateTransaccionProducto(transaccionProducto);
+    @PutMapping(path = "/Update/{idTransaccion}/{idProducto}")
+    public ResponseEntity<Object> updateTransaccionProducto(@PathVariable("idTransaccion") Integer idTransaccion,@PathVariable("idProducto") Integer idProducto,@RequestBody TransaccionProducto transaccionProducto) {
+        return transaccionProductoService.updateTransaccionProducto(idTransaccion,idProducto,transaccionProducto);
     }
 
-    @DeleteMapping(path = "{idTransaccion}/{idProducto}")
-    public ResponseEntity<Object> deleteTransaccionProducto(@PathVariable("idTransaccion") int idTransaccion,@PathVariable("idProducto") int idProducto) {
+    @DeleteMapping(path = "/Delete/{idTransaccion}/{idProducto}")
+    public ResponseEntity<Object> deleteTransaccionProducto(@PathVariable("idTransaccion") Integer idTransaccion,@PathVariable("idProducto") Integer idProducto) {
         return transaccionProductoService.deleteTransaccionProducto(idTransaccion,idProducto);
     }
 }

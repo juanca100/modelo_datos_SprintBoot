@@ -5,11 +5,10 @@ import com.challenge.modelo_de_datos.service.TipoPagoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "tipo_pago")
+@RequestMapping(path = "api/v1/TipoPago")
 public class TipoPagoController {
     private final TipoPagoService tipoPagoService;
 
@@ -23,18 +22,18 @@ public class TipoPagoController {
         return tipoPagoService.getTiposPago();
     }
 
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addTipoPago(@RequestBody TipoPago tipoPago) {
         return tipoPagoService.newTipoPago(tipoPago);
     }
 
-    @PutMapping
-    public ResponseEntity<Object> updateTipoPago(@RequestBody TipoPago tipoPago) {
-        return tipoPagoService.updateTipoPago(tipoPago);
+    @PutMapping(path = "/Update/{idTipoPago}")
+    public ResponseEntity<Object> updateTipoPago(@PathVariable("idTipoPago") Integer id,@RequestBody TipoPago tipoPago) {
+        return tipoPagoService.updateTipoPago(id,tipoPago);
     }
 
-    @DeleteMapping(path = "{idTipoPago}")
-    public ResponseEntity<Object> deleteTipoPago(@PathVariable("idTipoPago") int id) {
+    @DeleteMapping(path = "/Delete/{idTipoPago}")
+    public ResponseEntity<Object> deleteTipoPago(@PathVariable("idTipoPago") Integer id) {
         return tipoPagoService.deleteTipoPago(id);
     }
 }

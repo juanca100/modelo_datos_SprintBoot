@@ -1,25 +1,16 @@
 package com.challenge.modelo_de_datos.controller;
 
-
 import com.challenge.modelo_de_datos.model.ResenaTienda;
 import com.challenge.modelo_de_datos.service.ResenaTiendaService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.challenge.modelo_de_datos.model.ResenaProducto;
-import com.challenge.modelo_de_datos.model.Transaccion;
-import com.challenge.modelo_de_datos.service.ResenaProductoService;
-import com.challenge.modelo_de_datos.service.TransaccionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-import java.util.List;
 @RestController
-@RequestMapping(path = "ResenasTiendas")
-
+@RequestMapping(path = "api/v1/ResenaTienda")
 public class ResenaTiendaController {
 
     private final ResenaTiendaService resenaTiendaService;
@@ -30,21 +21,21 @@ public class ResenaTiendaController {
     }
 
     @GetMapping
-    public List<ResenaTienda> getResenasTiendas(){
-        return this.resenaTiendaService.getResenaTienda();
+    public List<ResenaTienda> getResenasTienda(){
+        return this.resenaTiendaService.getResenasTienda();
     }
 
-    @PostMapping
+    @PostMapping(path="/Create")
     public ResponseEntity<Object> addResenaTienda(@RequestBody ResenaTienda resenaTienda){
         return this.resenaTiendaService.newResenaTienda(resenaTienda);
     }
 
-    @PutMapping
-    public ResponseEntity<Object>updateResena(@RequestBody ResenaTienda resenaTienda){
-        return this.resenaTiendaService.updateResenaTienda(resenaTienda);
+    @PutMapping(path="/Update/{idResenaTienda}")
+    public ResponseEntity<Object>updateResena(@PathVariable("idResenaTienda") Integer id,@RequestBody ResenaTienda resenaTienda){
+        return this.resenaTiendaService.updateResenaTienda(id,resenaTienda);
     }
 
-    @DeleteMapping(path="{idResenaTienda}")
+    @DeleteMapping(path="/Delete/{idResenaTienda}")
     public ResponseEntity<Object> deleteTransaccion(@PathVariable("idResenaTienda") Integer id){
         return this.resenaTiendaService.deleteResenaTieneda(id);
     }

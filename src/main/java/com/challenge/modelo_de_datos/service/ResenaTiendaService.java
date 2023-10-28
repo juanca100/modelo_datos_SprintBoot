@@ -16,17 +16,14 @@ public class ResenaTiendaService {
     private final VendedorRepository vendedorRepository;
     private final UsuarioRepository usuarioRepository;
 
-@Autowired
-public ResenaTiendaService(ResenaTiendaRepository resenaTiendaRepository, VendedorRepository vendedorRepository, UsuarioRepository usuarioRepository) {
-        this.resenaTiendaRepository = resenaTiendaRepository;
-        this.vendedorRepository = vendedorRepository;
-        this.usuarioRepository = usuarioRepository;
+    @Autowired
+    public ResenaTiendaService(ResenaTiendaRepository resenaTiendaRepository, VendedorRepository vendedorRepository, UsuarioRepository usuarioRepository) {
+            this.resenaTiendaRepository = resenaTiendaRepository;
+            this.vendedorRepository = vendedorRepository;
+            this.usuarioRepository = usuarioRepository;
     }
 
-
-
-
-    public List<ResenaTienda> getResenaTienda(){
+    public List<ResenaTienda> getResenasTienda(){
         return this.resenaTiendaRepository.findAll();
     }
 
@@ -48,7 +45,7 @@ public ResenaTiendaService(ResenaTiendaRepository resenaTiendaRepository, Vended
                 datos.put("message","El usuario no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
@@ -56,17 +53,26 @@ public ResenaTiendaService(ResenaTiendaRepository resenaTiendaRepository, Vended
             datos.put("message","El vendedor no existe");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
     }
 
-    public ResponseEntity<Object> updateResenaTienda(ResenaTienda resenaTienda) {
+    public ResponseEntity<Object> updateResenaTienda(Integer id,ResenaTienda resenaTienda) {
         HashMap<String,Object> datos= new HashMap<>();
         boolean existeVendedor=this.vendedorRepository.existsById(resenaTienda.getVendedor().getIdVendedor());
         boolean existeUsuario=this.usuarioRepository.existsById(resenaTienda.getUsuario().getIdUsuario());
+        boolean existeRT=this.resenaTiendaRepository.existsById(id);
         if(existeVendedor){
             if(existeUsuario){
+                if(!existeRT){
+                    datos.put("error",true);
+                    datos.put("message","No hay resenaTienda con ese id");
+                    return new ResponseEntity<>(
+                            datos,
+                            HttpStatus.CONFLICT
+                    );
+                }
                 datos.put("message","Se actualizo con exito");
                 resenaTiendaRepository.save(resenaTienda);
                 datos.put("data",resenaTienda);
@@ -76,26 +82,28 @@ public ResenaTiendaService(ResenaTiendaRepository resenaTiendaRepository, Vended
                 );
             }
             else{
+                datos.put("error",true);
                 datos.put("message","El usuario no existe");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
         }
         else{
+            datos.put("error",true);
             datos.put("message","El vendedor no existe");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
     }
 
     public ResponseEntity<Object> deleteResenaTieneda(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.resenaTiendaRepository.existsById(id);
-        if(!existe){
+        boolean existeRT=this.resenaTiendaRepository.existsById(id);
+        if(!existeRT){
             datos.put("error",true);
             datos.put("message","No hay resenaTienda con ese id");
             return new ResponseEntity<>(

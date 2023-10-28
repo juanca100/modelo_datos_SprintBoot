@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,9 +31,14 @@ public class TipoPagoService {
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Object> updateTipoPago(TipoPago tipoPago) {
+    public ResponseEntity<Object> updateTipoPago(Integer id,TipoPago tipoPago) {
         HashMap<String, Object> datos = new HashMap<>();
         // Aquí puedes realizar las validaciones necesarias antes de actualizar el TipoPago
+        if (!tipoPagoRepository.existsById(id)) {
+            datos.put("error", true);
+            datos.put("message", "No existe el TipoPago con ese ID");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+        }
         TipoPago updatedTipoPago = tipoPagoRepository.save(tipoPago);
         datos.put("message", "Se actualizó con éxito");
         datos.put("data", updatedTipoPago);

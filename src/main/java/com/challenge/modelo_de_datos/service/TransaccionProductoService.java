@@ -33,9 +33,15 @@ public class TransaccionProductoService {
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Object> updateTransaccionProducto(TransaccionProducto transaccionProducto) {
+    public ResponseEntity<Object> updateTransaccionProducto(Integer idTransaccion,Integer idProducto,TransaccionProducto transaccionProducto) {
         HashMap<String, Object> datos = new HashMap<>();
         // Realiza validaciones necesarias antes de actualizar la TransaccionProducto
+        TransaccionProductoId id=new TransaccionProductoId(idTransaccion,idProducto);
+        if (!transaccionProductoRepository.existsById(id)) {
+            datos.put("error", true);
+            datos.put("message", "No existe la TransaccionProducto con ese ID");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+        }
         TransaccionProducto updatedTransaccionProducto = transaccionProductoRepository.save(transaccionProducto);
         datos.put("message", "Se actualizó con éxito");
         datos.put("data", updatedTransaccionProducto);

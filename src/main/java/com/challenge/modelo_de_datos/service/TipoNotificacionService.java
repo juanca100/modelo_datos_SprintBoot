@@ -34,8 +34,17 @@ public class TipoNotificacionService {
         );
     }
 
-    public ResponseEntity<Object> updateTipoNotificacion(TipoNotificacion tiponotificacion) {
+    public ResponseEntity<Object> updateTipoNotificacion(Integer id,TipoNotificacion tiponotificacion) {
         HashMap<String,Object> datos= new HashMap<>();
+        boolean existeTN=this.tipoNotificacionRepository.existsById(id);
+        if(!existeTN){
+            datos.put("error",true);
+            datos.put("message","No existe el tipo de notificacion con ese id");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
         datos.put("message","Se actualizo con exito");
         tipoNotificacionRepository.save(tiponotificacion);
         datos.put("data",tiponotificacion);
@@ -47,8 +56,8 @@ public class TipoNotificacionService {
 
     public ResponseEntity<Object> deleteTipoNotificacion(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.tipoNotificacionRepository.existsById(id);
-        if(!existe){
+        boolean existeTN=this.tipoNotificacionRepository.existsById(id);
+        if(!existeTN){
             datos.put("error",true);
             datos.put("message","No existe el tipo de notificacion con ese id");
             return new ResponseEntity<>(

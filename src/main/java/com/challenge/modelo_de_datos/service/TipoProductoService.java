@@ -22,12 +22,12 @@ public class TipoProductoService {
         CategoriaRepository = categoriaRepository;
     }
 
-    public List<TipoProducto> getTiposProductos()
+    public List<TipoProducto> getTiposProducto()
     {
         return this.TipoProductoRepository.findAll();
     }
 
-    public ResponseEntity<Object> newTiposProductos(TipoProducto tipoProducto) {
+    public ResponseEntity<Object> newTipoProducto(TipoProducto tipoProducto) {
         HashMap<String,Object> datos= new HashMap<>();
         boolean existe=this.CategoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria());
         if(existe){
@@ -46,10 +46,20 @@ public class TipoProductoService {
         );
     }
 
-    public ResponseEntity<Object> updateTiposProducto(TipoProducto tipoProducto) {
+    public ResponseEntity<Object> updateTipoProducto(Integer id,TipoProducto tipoProducto) {
         HashMap<String,Object> datos= new HashMap<>();
         boolean existe=this.CategoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria());
+        boolean existeTP=this.TipoProductoRepository.existsById(id);
+       // tipoProducto.setIdTipoProducto(id);
         if(existe){
+            if(!existeTP){
+                datos.put("error",true);
+                datos.put("message","No existe el tipo de producto con ese id");
+                return new ResponseEntity<>(
+                        datos,
+                        HttpStatus.CONFLICT
+                );
+            }
             datos.put("message","Se actualizo con exito");
             TipoProductoRepository.save(tipoProducto);
             datos.put("data",tipoProducto);
@@ -65,10 +75,10 @@ public class TipoProductoService {
         );
     }
 
-    public ResponseEntity<Object> deleteTiposProducto(Integer id){
+    public ResponseEntity<Object> deleteTipoProducto(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.TipoProductoRepository.existsById(id);
-        if(!existe){
+        boolean existeTP=this.TipoProductoRepository.existsById(id);
+        if(!existeTP){
             datos.put("error",true);
             datos.put("message","No existe el tipo de producto con ese id");
             return new ResponseEntity<>(
