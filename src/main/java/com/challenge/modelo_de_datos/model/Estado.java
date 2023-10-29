@@ -13,6 +13,7 @@ public class Estado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_estado")
     int idEstado;
+
     @Column(name="estado")
     String estado;
 

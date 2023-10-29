@@ -5,7 +5,7 @@ import com.challenge.modelo_de_datos.service.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,12 +19,12 @@ public class EstadoController {
     }
 
     @GetMapping
-    public List<Estado> getEstados(){
+    public List<Estado> getEstados() {
         return this.estadoService.getEstados();
     }
 
-    @PostMapping(path="/Create")
-    public ResponseEntity<Object> addEstado(@RequestBody Estado estado){
+    @PostMapping(path = "/Create")
+    public ResponseEntity<Object> addEstado(@RequestBody @Valid Estado estado) {
         return this.estadoService.newEstado(estado);
     }
 
