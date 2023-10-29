@@ -5,6 +5,8 @@ import com.challenge.modelo_de_datos.service.TipoNotificacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,12 +25,12 @@ public class TipoNotificacionController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addTipoN(@RequestBody TipoNotificacion tipoN){
+    public ResponseEntity<Object> addTipoN(@RequestBody @Valid TipoNotificacion tipoN){
         return this.tipoNotificacionService.newTipoNotificacion(tipoN);
     }
 
     @PutMapping(path="/Update/{idTipoNotificacion}")
-    public ResponseEntity<Object>updateTipoN(@PathVariable("idTipoNotificacion") Integer id,@RequestBody TipoNotificacion tipoN){
+    public ResponseEntity<Object>updateTipoN(@PathVariable("idTipoNotificacion") Integer id,@RequestBody @Valid TipoNotificacion tipoN){
         return this.tipoNotificacionService.updateTipoNotificacion(id,tipoN);
     }
 

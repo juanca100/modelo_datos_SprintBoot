@@ -28,7 +28,7 @@ public class EstadoService {
     public ResponseEntity<Object> newEstado(Estado estado) {
         HashMap<String, Object> datos = new HashMap<>();
         Integer id=estado.getIdEstado();
-        if(id!=null){
+        if(id!=0){
             datos.put("error",true);
             datos.put("message", "No mandar ID, este se genera automaticamente");
             return new ResponseEntity<>(
