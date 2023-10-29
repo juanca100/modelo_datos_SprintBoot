@@ -29,7 +29,7 @@ public class EstadoController {
     }
 
     @PutMapping(path="/Update/{idEstado}")
-    public ResponseEntity<Object>updateEstado(@PathVariable("idEstado") Integer id,@RequestBody Estado estado){
+    public ResponseEntity<Object>updateEstado(@PathVariable("idEstado") Integer id, @RequestBody @Valid Estado estado){
         return this.estadoService.updateEstado(id,estado);
     }
 
@@ -38,5 +38,3 @@ public class EstadoController {
         return this.estadoService.deleteEstado(id);
     }
 }
-
-

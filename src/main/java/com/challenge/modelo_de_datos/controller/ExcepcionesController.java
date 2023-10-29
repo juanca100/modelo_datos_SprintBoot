@@ -12,13 +12,11 @@ public class ExcepcionesController {
     public ResponseEntity<Object> handleGlobalException(Exception ex) {
         HashMap<String, Object> datos = new HashMap<>();
         datos.put("error",true);
-        datos.put("message", " Ocurrió un error inesperado: " + ex.getMessage());
+        datos.put("message", " Ocurrió el siguiente error: " + ex.getMessage());
         return new ResponseEntity<>(
                 datos,
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
-
-    // Agregar más métodos @ExceptionHandler para manejar excepciones específicas si es necesario.
 }
 
