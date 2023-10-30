@@ -5,6 +5,8 @@ import com.challenge.modelo_de_datos.service.VendedorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -22,18 +24,17 @@ public class VendedorController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addVendedor(@RequestBody Vendedor vendedor){
+    public ResponseEntity<Object> addVendedor(@RequestBody @Valid Vendedor vendedor){
         return this.VendedorService.newVendedor(vendedor);
     }
 
     @PutMapping(path="/Update/{idVendedor}")
-    public ResponseEntity<Object>updateComprador(@PathVariable("idVendedor") Integer id,@RequestBody Vendedor vendedor){
+    public ResponseEntity<Object>updateComprador(@PathVariable("idVendedor") @NotNull Integer id, @RequestBody @Valid Vendedor vendedor){
         return this.VendedorService.updateVendedor(id,vendedor);
     }
 
     @DeleteMapping(path="/Delete/{idVendedor}")
-    public ResponseEntity<Object> deleteVendedor(@PathVariable("idVendedor") Integer id){
+    public ResponseEntity<Object> deleteVendedor(@PathVariable("idVendedor") @NotNull Integer id){
         return this.VendedorService.deleteVendedor(id);
     }
 }
-

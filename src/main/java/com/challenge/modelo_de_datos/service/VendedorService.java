@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,82 +31,131 @@ public class VendedorService {
 
     public ResponseEntity<Object> newVendedor(Vendedor vendedor) {
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existeUsuario=this.UsuarioRepository.existsById(vendedor.getUsuario().getIdUsuario());
-        boolean existeCiudad=this.CiudadRepository.existsById(vendedor.getCiudad().getIdCiudad());
-        if(existeUsuario){
-            if(existeCiudad){
-                datos.put("message","Se guardo con exito");
-                VendedorRepository.save(vendedor);
-                datos.put("data",vendedor);
+        Integer id=vendedor.getIdVendedor();
+        if(id!=0){
+            datos.put("error",true);
+            datos.put("message", "No mandar ID, este se genera automaticamente");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if(vendedor.getClaveVendedor()==null||vendedor.getUsuario()==null||vendedor.getCiudad()==null) {
+            datos.put("error", true);
+            datos.put("message", "Ingresa todos los campos de la tabla excepto el ID");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        else{
+            if (vendedor.getClaveVendedor().isBlank()) {
+                datos.put("error", true);
+                datos.put("message", "Los campos de texto no deben estar vacios");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
             }
             else{
-                datos.put("message","La ciudad no existe");
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CREATED
-                );
-            }
-        }
-        else{
-            datos.put("message","El usuario no existe");
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CREATED
-            );
-        }
-    }
-
-    public ResponseEntity<Object> updateVendedor(Integer id,Vendedor vendedor) {
-        HashMap<String,Object> datos= new HashMap<>();
-        boolean existeUsuario=this.UsuarioRepository.existsById(vendedor.getUsuario().getIdUsuario());
-        boolean existeCiudad=this.CiudadRepository.existsById(vendedor.getCiudad().getIdCiudad());
-        boolean existeVendedor=this.VendedorRepository.existsById(id);
-        if(existeUsuario){
-            if(existeCiudad){
-                if(!existeVendedor){
+                if(UsuarioRepository.existsById(vendedor.getUsuario().getIdUsuario())){
+                    if(CiudadRepository.existsById(vendedor.getCiudad().getIdCiudad())){
+                        datos.put("message","Se guardo con exito");
+                        VendedorRepository.save(vendedor);
+                        datos.put("data",vendedor);
+                        return new ResponseEntity<>(
+                                datos,
+                                HttpStatus.CREATED
+                        );
+                    }
+                    else{
+                        datos.put("error",true);
+                        datos.put("message","El ID de la ciudad proporcionado es erroneo");
+                        return new ResponseEntity<>(
+                                datos,
+                                HttpStatus.CONFLICT
+                        );
+                    }
+                }
+                else{
                     datos.put("error",true);
-                    datos.put("message","No existe el tipo de producto con ese id");
+                    datos.put("message","El ID del usuario proporcionado es erroneo");
                     return new ResponseEntity<>(
                             datos,
                             HttpStatus.CONFLICT
                     );
                 }
+            }
+        }
+    }
+
+    public ResponseEntity<Object> updateVendedor(Integer id,Vendedor vendedor) {
+        HashMap<String,Object> datos= new HashMap<>();
+        if(vendedor.getClaveVendedor()==null||vendedor.getUsuario()==null||vendedor.getCiudad()==null) {
+            datos.put("error", true);
+            datos.put("message", "Ingresa todos los campos de la tabla excepto el ID");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        else{
+            if(VendedorRepository.existsById(id)){
                 vendedor.setIdVendedor(id);
-                datos.put("message","Se actualizo con exito");
-                VendedorRepository.save(vendedor);
-                datos.put("data",vendedor);
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CREATED
-                );
+                if (vendedor.getClaveVendedor().isBlank()) {
+                    datos.put("error", true);
+                    datos.put("message", "Los campos de texto no deben estar vacios");
+                    return new ResponseEntity<>(
+                            datos,
+                            HttpStatus.CONFLICT
+                    );
+                }
+                else{
+                    if(UsuarioRepository.existsById(vendedor.getUsuario().getIdUsuario())){
+                        if(CiudadRepository.existsById(vendedor.getCiudad().getIdCiudad())){
+                            datos.put("message","Se actualizo con exito");
+                            VendedorRepository.save(vendedor);
+                            datos.put("data",vendedor);
+                            return new ResponseEntity<>(
+                                    datos,
+                                    HttpStatus.CREATED
+                            );
+                        }
+                        else{
+                            datos.put("error",true);
+                            datos.put("message","El ID de la ciudad proporcionado es erroneo");
+                            return new ResponseEntity<>(
+                                    datos,
+                                    HttpStatus.CONFLICT
+                            );
+                        }
+                    }
+                    else{
+                        datos.put("error",true);
+                        datos.put("message","El ID del usuario proporcionado es erroneo");
+                        return new ResponseEntity<>(
+                                datos,
+                                HttpStatus.CONFLICT
+                        );
+                    }
+                }
             }
             else{
-                datos.put("message","La ciudad no existe");
+                datos.put("error",true);
+                datos.put("message","El id proporcionado del Vendedor es erroneo");
                 return new ResponseEntity<>(
                         datos,
                         HttpStatus.CONFLICT
                 );
             }
         }
-        else{
-            datos.put("message","El usuario no existe");
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CONFLICT
-            );
-        }
     }
 
     public ResponseEntity<Object> deleteVendedor(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existeVendedor=this.VendedorRepository.existsById(id);
-        if(!existeVendedor){
+        if(!VendedorRepository.existsById(id)){
             datos.put("error",true);
-            datos.put("message","No existe el tipo de producto con ese id");
+            datos.put("message","No existe vendedor con ese id");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CONFLICT

@@ -5,6 +5,8 @@ import com.challenge.modelo_de_datos.service.NotificacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -23,17 +25,17 @@ public class NotificacionController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addNotificacion(@RequestBody Notificacion notificacion){
+    public ResponseEntity<Object> addNotificacion(@RequestBody @Valid Notificacion notificacion){
         return this.notificacionService.newNotificacion(notificacion);
     }
 
     @PutMapping(path="/Update/{idNotificacion}")
-    public ResponseEntity<Object>updateNotificacion(@PathVariable("idNotificacion") Integer id,@RequestBody Notificacion notificacion){
+    public ResponseEntity<Object>updateNotificacion(@PathVariable("idNotificacion") @NotNull Integer id, @RequestBody @Valid Notificacion notificacion){
         return this.notificacionService.updateNotificacion(id,notificacion);
     }
 
     @DeleteMapping(path="/Delete/{idNotificacion}")
-    public ResponseEntity<Object> deleteTipoN(@PathVariable("idNotificacion") Integer id){
+    public ResponseEntity<Object> deleteTipoN(@PathVariable("idNotificacion") @NotNull Integer id){
         return this.notificacionService.deleteNotificacion(id);
     }
 }

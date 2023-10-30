@@ -110,7 +110,7 @@ public class EstadoService {
                     } else {
                         if (!paisRepository.existsById(estado.getPais().getIdPais())) {
                             datos.put("error", true);
-                            datos.put("message", "El id del pais es erroneo");
+                            datos.put("message", "El pais no existe,ID erroneo");
                             return new ResponseEntity<>(
                                     datos,
                                     HttpStatus.CONFLICT
@@ -127,6 +127,7 @@ public class EstadoService {
                 }
             }
             else{
+                datos.put("error", true);
                 datos.put("message","El id del estado proporcionado es erroneo");
                 return new ResponseEntity<>(
                         datos,

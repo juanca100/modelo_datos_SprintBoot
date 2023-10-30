@@ -5,6 +5,9 @@ import com.challenge.modelo_de_datos.service.TransaccionProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -23,18 +26,17 @@ public class TransaccionProductoController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addTransaccionProducto(@RequestBody TransaccionProducto transaccionProducto) {
+    public ResponseEntity<Object> addTransaccionProducto(@RequestBody @Valid TransaccionProducto transaccionProducto) {
         return transaccionProductoService.newTransaccionProducto(transaccionProducto);
     }
 
-    @PutMapping(path = "/Update/{idTransaccion}/{idProducto}")
-    public ResponseEntity<Object> updateTransaccionProducto(@PathVariable("idTransaccion") Integer idTransaccion,@PathVariable("idProducto") Integer idProducto,@RequestBody TransaccionProducto transaccionProducto) {
+    @PutMapping(path = "/Update/Transaccion/{idTransaccion}/Producto/{idProducto}")
+    public ResponseEntity<Object> updateTransaccionProducto(@PathVariable("idTransaccion") @NotNull Integer idTransaccion, @PathVariable("idProducto") @NotNull Integer idProducto, @RequestBody @Valid TransaccionProducto transaccionProducto) {
         return transaccionProductoService.updateTransaccionProducto(idTransaccion,idProducto,transaccionProducto);
     }
 
-    @DeleteMapping(path = "/Delete/{idTransaccion}/{idProducto}")
-    public ResponseEntity<Object> deleteTransaccionProducto(@PathVariable("idTransaccion") Integer idTransaccion,@PathVariable("idProducto") Integer idProducto) {
+    @DeleteMapping(path = "/Delete/Transaccion/{idTransaccion}/Producto/{idProducto}")
+    public ResponseEntity<Object> deleteTransaccionProducto(@PathVariable("idTransaccion") @NotNull  Integer idTransaccion,@PathVariable("idProducto") @NotNull Integer idProducto) {
         return transaccionProductoService.deleteTransaccionProducto(idTransaccion,idProducto);
     }
 }
-
