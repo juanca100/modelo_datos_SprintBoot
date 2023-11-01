@@ -5,6 +5,8 @@ import com.challenge.modelo_de_datos.service.CiudadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -24,17 +26,17 @@ public class CiudadController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addCiudad(@RequestBody Ciudad ciudad){
+    public ResponseEntity<Object> addCiudad(@RequestBody @Valid Ciudad ciudad){
         return this.ciudadService.newCiudad(ciudad);
     }
 
     @PutMapping(path="/Update/{idCiudad}")
-    public ResponseEntity<Object>updateCiudad(@PathVariable("idCiudad") Integer id,@RequestBody Ciudad ciudad){
+    public ResponseEntity<Object>updateCiudad(@PathVariable("idCiudad") @NotNull Integer id,@RequestBody @Valid Ciudad ciudad){
         return this.ciudadService.updateCiudad(id,ciudad);
     }
 
     @DeleteMapping(path="/Delete/{idCiudad}")
-    public ResponseEntity<Object> deleteCiudad(@PathVariable("idCiudad") Integer id){
+    public ResponseEntity<Object> deleteCiudad(@PathVariable("idCiudad") @NotNull Integer id){
         return this.ciudadService.deleteCiudad(id);
     }
 }

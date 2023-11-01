@@ -28,69 +28,135 @@ public class CiudadService {
 
     public ResponseEntity<Object> newCiudad(Ciudad ciudad) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existeEstado = this.estadoRepository.existsById(ciudad.getEstado().getIdEstado());
-        if (existeEstado) {
-            datos.put("message", "Se guardo con exito");
-            ciudadRepository.save(ciudad);
-            datos.put("data", ciudad);
+
+        Integer id=ciudad.getIdCiudad();
+        if (id!=0){
+            datos.put("error",true);
+            datos.put("message","No mandar ID");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.BAD_REQUEST
             );
-        } else {
-            datos.put("message", "El estado no existe");
+        }
+        if(ciudad.getCiudad()==null||ciudad.getEstado()==null){
+
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.BAD_REQUEST
             );
+
+        }else{
+
+            if(ciudad.getCiudad().isBlank()){
+                datos.put("error",true);
+                datos.put("message", "Los campos de caracteres no deben estar vacios");
+                return new ResponseEntity<>(
+                        datos,
+                        HttpStatus.CONFLICT
+                );
+            }else{
+                if (ciudad.getCiudad().matches("\\d+")) {
+                    datos.put("error", true);
+                    datos.put("message", "Las campos de caracteres no deben ser numeros");
+                    return new ResponseEntity<>(
+                            datos,
+                            HttpStatus.CONFLICT
+                    );
+            }else{
+                    if(!estadoRepository.existsById(ciudad.getEstado().getIdEstado())){
+                        datos.put("error", true);
+                        datos.put("message", "El pais no existe, ID erroneo");
+                        return new ResponseEntity<>(
+                                datos,
+                                HttpStatus.CREATED
+                        );
+                    }
+                    datos.put("message","SE GUARDO LA CIUDAD CON EXITO");
+                    ciudadRepository.save(ciudad);
+                    datos.put("data",ciudad);
+                    return new ResponseEntity<>(
+                            datos,
+                            HttpStatus.CREATED
+                    );
+
+                }
+            }
+
         }
     }
 
     public ResponseEntity<Object> updateCiudad (Integer id,Ciudad ciudad) {
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existeEstado=this.estadoRepository.existsById(ciudad.getEstado().getIdEstado());
-        boolean existeCiudad=this.ciudadRepository.existsById(id);
-        if(existeCiudad){
-            if(existeEstado){
+        if(ciudad.getCiudad()==null||ciudad.getEstado()==null){
+            datos.put("error",true);
+            datos.put("message","INGRESA TODOS LOS CAMPOS DE LA TABLA");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }else{
+            if(ciudadRepository.existsById(id)){
                 ciudad.setIdCiudad(id);
-                datos.put("message","Se actualizo con exito");
-                ciudadRepository.save(ciudad);
-                datos.put("data",ciudad);
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CREATED
-                );
+
+                if(ciudad.getCiudad().isBlank()){
+                    datos.put("error",true);
+                    datos.put("message","LOS CAMPOS DE CARACTERES NO DEBEN ESTAR VACIOS");
+                    return new ResponseEntity<>(
+                            datos,
+                            HttpStatus.CONFLICT
+                    );
+
+                }else{
+                    if (ciudad.getCiudad().matches("\\d+")) {
+                        datos.put("error", true);
+                        datos.put("message", "Las campos de caracteres no deben ser numeros");
+                        return new ResponseEntity<>(
+                                datos,
+                                HttpStatus.CONFLICT
+                        );
+                }else{
+                        if (!estadoRepository.existsById(ciudad.getEstado().getIdEstado())) {
+                            datos.put("error", true);
+                            datos.put("message", "El pais no existe,ID erroneo");
+                            return new ResponseEntity<>(
+                                    datos,
+                                    HttpStatus.CONFLICT
+                            );
+                    }
+                        datos.put("message","SE ACTUALIZO CON EXITO");
+                        ciudadRepository.save(ciudad);
+                        datos.put("data",ciudad);
+                        return new ResponseEntity<>(
+                                datos,
+                                HttpStatus.CREATED
+                        );
+                }
             }
-            else{
-                datos.put("message","El estado con ese no existe");
+        }else{
+                datos.put("error", true);
+                datos.put("message","El id del estado proporcionado es erroneo");
                 return new ResponseEntity<>(
                         datos,
                         HttpStatus.CONFLICT
                 );
             }
         }
-        else{
-            datos.put("message","No existe ciudad con ese ID");
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CONFLICT
-            );
-        }
     }
 
     public ResponseEntity<Object> deleteCiudad(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existeCiudad=this.ciudadRepository.existsById(id);
-        if(!existeCiudad){
+        if(!ciudadRepository.existsById(id)){
             datos.put("error",true);
-            datos.put("message","No existe la ciudad con ese id");
+            datos.put("message","No existe estado con ese id");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CONFLICT
             );
         }
         ciudadRepository.deleteById(id);
-        datos.put("message","Ciudad eliminada");
+        datos.put("message","CIUDAD ELIMINADA");
         return new ResponseEntity<>(
                 datos,
                 HttpStatus.ACCEPTED
