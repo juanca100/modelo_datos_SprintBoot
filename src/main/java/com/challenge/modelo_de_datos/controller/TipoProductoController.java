@@ -5,6 +5,8 @@ import com.challenge.modelo_de_datos.service.TipoProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -23,17 +25,17 @@ public class TipoProductoController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addTipoProducto(@RequestBody TipoProducto tipoProducto){
+    public ResponseEntity<Object> addTipoProducto(@RequestBody @Valid TipoProducto tipoProducto){
         return this.tipoProductoService.newTipoProducto(tipoProducto);
     }
 
     @PutMapping(path = "/Update/{idTipoProducto}")
-    public ResponseEntity<Object>updateTipoProducto(@PathVariable("idTipoProducto") Integer id,@RequestBody TipoProducto tipoProducto){
+    public ResponseEntity<Object>updateTipoProducto(@PathVariable("idTipoProducto") @NotNull Integer id,@RequestBody @Valid TipoProducto tipoProducto){
         return this.tipoProductoService.updateTipoProducto(id,tipoProducto);
     }
 
     @DeleteMapping(path = "/Delete/{idTipoProducto}")
-    public ResponseEntity<Object> deleteCategoria(@PathVariable("idTipoProducto") Integer id){
+    public ResponseEntity<Object> deleteCategoria(@PathVariable("idTipoProducto") @NotNull Integer id){
         return this.tipoProductoService.deleteTipoProducto(id);
     }
 }

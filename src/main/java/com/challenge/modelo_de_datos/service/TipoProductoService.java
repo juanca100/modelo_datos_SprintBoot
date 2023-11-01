@@ -13,69 +13,84 @@ import java.util.List;
 
 @Service
 public class TipoProductoService {
-    private final TipoProductoRepository tipoProductoRepository;
-    private final CategoriaRepository categoriaRepository;
+    private final TipoProductoRepository TipoProductoRepository;
+    private final CategoriaRepository CategoriaRepository;
 
     @Autowired
     public TipoProductoService(TipoProductoRepository tipoProductoRepository, CategoriaRepository categoriaRepository) {
-        this.tipoProductoRepository = tipoProductoRepository;
-        this.categoriaRepository = categoriaRepository;
+        TipoProductoRepository = tipoProductoRepository;
+        CategoriaRepository = categoriaRepository;
     }
 
-    public List<TipoProducto> getTiposProducto() {
-        return this.tipoProductoRepository.findAll();
+    public List<TipoProducto> getTiposProducto()
+    {
+        return this.TipoProductoRepository.findAll();
     }
 
     public ResponseEntity<Object> newTipoProducto(TipoProducto tipoProducto) {
-        HashMap<String, Object> datos = new HashMap<>();
-        boolean existe = this.categoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria());
-
-        if (existe) {
-            datos.put("message", "Se guardó con éxito");
-            tipoProductoRepository.save(tipoProducto);
-            datos.put("data", tipoProducto);
-            return new ResponseEntity<>(datos, HttpStatus.CREATED);
-        }
-
-        datos.put("message", "La categoría no existe");
-        return new ResponseEntity<>(datos, HttpStatus.CREATED);
-    }
-
-    public ResponseEntity<Object> updateTipoProducto(Integer id, TipoProducto tipoProducto) {
-        HashMap<String, Object> datos = new HashMap<>();
-        boolean existe = this.categoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria());
-        boolean existeTP = this.tipoProductoRepository.existsById(id);
-
-        if (existe) {
-            if (!existeTP) {
-                datos.put("error", true);
-                datos.put("message", "No existe el tipo de producto con ese ID");
-                return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+        HashMap<String,Object> datos= new HashMap<>();
+        boolean existe=this.CategoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria());
+        if(existe){
+            datos.put("message","Se guardo con exito");
+            TipoProductoRepository.save(tipoProducto);
+            datos.put("data",tipoProducto);
+            return new ResponseEntity<>(
+                datos,
+                HttpStatus.CREATED
+                );
             }
-
-            tipoProducto.setIdTipoProducto(id);
-            datos.put("message", "Se actualizó con éxito");
-            tipoProductoRepository.save(tipoProducto);
-            datos.put("data", tipoProducto);
-            return new ResponseEntity<>(datos, HttpStatus.CREATED);
-        }
-
-        datos.put("message", "La categoría no existe");
-        return new ResponseEntity<>(datos, HttpStatus.CREATED);
+        datos.put("message","La categoria no existe");
+        return new ResponseEntity<>(
+                datos,
+                HttpStatus.CREATED
+        );
     }
 
-    public ResponseEntity<Object> deleteTipoProducto(Integer id) {
-        HashMap<String, Object> datos = new HashMap<>();
-        boolean existeTP = this.tipoProductoRepository.existsById(id);
-
-        if (!existeTP) {
-            datos.put("error", true);
-            datos.put("message", "No existe el tipo de producto con ese ID");
-            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+    public ResponseEntity<Object> updateTipoProducto(Integer id,TipoProducto tipoProducto) {
+        HashMap<String,Object> datos= new HashMap<>();
+        boolean existe=this.CategoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria());
+        boolean existeTP=this.TipoProductoRepository.existsById(id);
+        if(existe){
+            if(!existeTP){
+                datos.put("error",true);
+                datos.put("message","No existe el tipo de producto con ese id");
+                return new ResponseEntity<>(
+                        datos,
+                        HttpStatus.CONFLICT
+                );
+            }
+            tipoProducto.setIdTipoProducto(id);
+            datos.put("message","Se actualizo con exito");
+            TipoProductoRepository.save(tipoProducto);
+            datos.put("data",tipoProducto);
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CREATED
+            );
         }
+        datos.put("message","La categoria no existe");
+        return new ResponseEntity<>(
+                datos,
+                HttpStatus.CREATED
+        );
+    }
 
-        tipoProductoRepository.deleteById(id);
-        datos.put("message", "Tipo eliminado");
-        return new ResponseEntity<>(datos, HttpStatus.ACCEPTED);
+    public ResponseEntity<Object> deleteTipoProducto(Integer id){
+        HashMap<String,Object> datos= new HashMap<>();
+        boolean existeTP=this.TipoProductoRepository.existsById(id);
+        if(!existeTP){
+            datos.put("error",true);
+            datos.put("message","No existe el tipo de producto con ese id");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        TipoProductoRepository.deleteById(id);
+        datos.put("message","Tipo eliminado");
+        return new ResponseEntity<>(
+                datos,
+                HttpStatus.ACCEPTED
+        );
     }
 }
