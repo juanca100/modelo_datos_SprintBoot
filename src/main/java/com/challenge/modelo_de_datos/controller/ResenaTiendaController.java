@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -26,17 +29,17 @@ public class ResenaTiendaController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addResenaTienda(@RequestBody ResenaTienda resenaTienda){
+    public ResponseEntity<Object> addResenaTienda(@RequestBody @Valid ResenaTienda resenaTienda){
         return this.resenaTiendaService.newResenaTienda(resenaTienda);
     }
 
     @PutMapping(path="/Update/{idResenaTienda}")
-    public ResponseEntity<Object>updateResena(@PathVariable("idResenaTienda") Integer id,@RequestBody ResenaTienda resenaTienda){
+    public ResponseEntity<Object>updateResena(@PathVariable("idResenaTienda") @NotNull Integer id, @RequestBody @Valid ResenaTienda resenaTienda){
         return this.resenaTiendaService.updateResenaTienda(id,resenaTienda);
     }
 
     @DeleteMapping(path="/Delete/{idResenaTienda}")
-    public ResponseEntity<Object> deleteTransaccion(@PathVariable("idResenaTienda") Integer id){
+    public ResponseEntity<Object> deleteTransaccion(@PathVariable("idResenaTienda") @NotNull Integer id){
         return this.resenaTiendaService.deleteResenaTieneda(id);
     }
 
