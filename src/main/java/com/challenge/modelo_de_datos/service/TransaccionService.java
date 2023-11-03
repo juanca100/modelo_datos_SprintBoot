@@ -20,105 +20,87 @@ public class TransaccionService {
     private final CompradorRepository compradorRepository;
 
     @Autowired
-    public TransaccionService(TransaccionRepository transaccionRepository, VendedorRepository vendedorRepository, CompradorRepository compradorRepository) {
+    public TransaccionService(
+            TransaccionRepository transaccionRepository,
+            VendedorRepository vendedorRepository,
+            CompradorRepository compradorRepository
+    ) {
         this.transaccionRepository = transaccionRepository;
         this.vendedorRepository = vendedorRepository;
         this.compradorRepository = compradorRepository;
     }
 
-    public List<Transaccion> getTransacciones(){
+    public List<Transaccion> getTransacciones() {
         return this.transaccionRepository.findAll();
     }
 
     public ResponseEntity<Object> newTransaccion(Transaccion transaccion) {
-        HashMap<String,Object> datos= new HashMap<>();
-        boolean existeComprador=this.compradorRepository.existsById(transaccion.getComprador().getIdComprador());
-        boolean existeVendedor=this.vendedorRepository.existsById(transaccion.getVendedor().getIdVendedor());
-        if(existeComprador){
-            if(existeVendedor){
-                datos.put("message","Se guardo con exito");
-                transaccionRepository.save(transaccion);
-                datos.put("data",transaccion);
-                return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CREATED
-                );
-            }
-            else{
-                datos.put("message","El vendedor no existe");
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CREATED
-                );
-            }
+        HashMap<String, Object> datos = new HashMap<>();
+
+        // Validación: Comprador y Vendedor existen
+        if (!compradorRepository.existsById(transaccion.getComprador().getIdComprador())) {
+            datos.put("error", true);
+            datos.put("message", "El comprador no existe");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
         }
-        else{
-            datos.put("message","El comprador no existe");
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CREATED
-            );
+
+        if (!vendedorRepository.existsById(transaccion.getVendedor().getIdVendedor())) {
+            datos.put("error", true);
+            datos.put("message", "El vendedor no existe");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
         }
+
+        // Guardar la Transaccion si las validaciones pasan
+        datos.put("message", "Se guardó con éxito");
+        transaccionRepository.save(transaccion);
+        datos.put("data", transaccion);
+        return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Object> updateTransaccion(Integer id,Transaccion transaccion) {
-        HashMap<String,Object> datos= new HashMap<>();
-        boolean existeComprador=this.compradorRepository.existsById(transaccion.getComprador().getIdComprador());
-        boolean existeVendedor=this.vendedorRepository.existsById(transaccion.getVendedor().getIdVendedor());
-        boolean existeTransaccion=this.transaccionRepository.existsById(id);
-        if(existeComprador){
-            if(existeVendedor){
-                if(!existeTransaccion){
-                    datos.put("error",true);
-                    datos.put("message","No hay transaccion con ese id");
-                    return new ResponseEntity<>(
-                            datos,
-                            HttpStatus.CONFLICT
-                    );
-                }
-                transaccion.setIdTransaccion(id);
-                datos.put("message","Se actualizo con exito");
-                transaccionRepository.save(transaccion);
-                datos.put("data",transaccion);
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CREATED
-                );
-            }
-            else{
-                datos.put("message","El vendedor no existe");
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CONFLICT
-                );
-            }
+    public ResponseEntity<Object> updateTransaccion(Integer id, Transaccion transaccion) {
+        HashMap<String, Object> datos = new HashMap<>();
+
+        // Validación: Comprador y Vendedor existen
+        if (!compradorRepository.existsById(transaccion.getComprador().getIdComprador())) {
+            datos.put("error", true);
+            datos.put("message", "El comprador no existe");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
         }
-        else{
-            datos.put("message","El comprador no existe");
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CONFLICT
-            );
+
+        if (!vendedorRepository.existsById(transaccion.getVendedor().getIdVendedor())) {
+            datos.put("error", true);
+            datos.put("message", "El vendedor no existe");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
         }
+
+        // Validación: Existe la Transaccion con el ID proporcionado
+        if (!transaccionRepository.existsById(id)) {
+            datos.put("error", true);
+            datos.put("message", "No existe la Transaccion con ese ID");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+        }
+
+        // Actualizar la Transaccion si las validaciones pasan
+        transaccion.setIdTransaccion(id);
+        datos.put("message", "Se actualizó con éxito");
+        transaccionRepository.save(transaccion);
+        datos.put("data", transaccion);
+        return new ResponseEntity<>(datos, HttpStatus.OK);
     }
 
-    public ResponseEntity<Object> deleteTransaccion(Integer id){
-        HashMap<String,Object> datos= new HashMap<>();
-        boolean existeTransaccion=this.transaccionRepository.existsById(id);
-        if(!existeTransaccion){
-            datos.put("error",true);
-            datos.put("message","No hay transaccion con ese id");
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CONFLICT
-            );
+    public ResponseEntity<Object> deleteTransaccion(Integer id) {
+        HashMap<String, Object> datos = new HashMap<>();
+
+        // Validación: Existe la Transaccion con el ID proporcionado
+        if (!transaccionRepository.existsById(id)) {
+            datos.put("error", true);
+            datos.put("message", "No existe la Transaccion con ese ID");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
         }
+
+        // Eliminar la Transaccion si la validación pasa
         transaccionRepository.deleteById(id);
-        datos.put("message","Transaccion eliminada");
-        return new ResponseEntity<>(
-                datos,
-                HttpStatus.ACCEPTED
-        );
+        datos.put("message", "Transaccion eliminada");
+        return new ResponseEntity<>(datos, HttpStatus.ACCEPTED);
     }
 }
-

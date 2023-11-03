@@ -31,13 +31,24 @@ public class TipoPagoService {
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Object> updateTipoPago(Integer id,TipoPago tipoPago) {
+    public ResponseEntity<Object> updateTipoPago(Integer id, TipoPago tipoPago) {
         HashMap<String, Object> datos = new HashMap<>();
         // Aquí puedes realizar las validaciones necesarias antes de actualizar el TipoPago
         if (!tipoPagoRepository.existsById(id)) {
             datos.put("error", true);
             datos.put("message", "No existe el TipoPago con ese ID");
             return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+
+        } else {
+            if (tipoPagoRepository.existsById((id))) {
+                tipoPago.setIdTipoPago(id);
+                if (tipoPago.getTipoPago().isEmpty()) {
+                    datos.put("error", true);
+                    datos.put("message", "Los campos de caracteres no deben estar vacios");
+                    return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+
+                }
+            }
         }
         tipoPago.setIdTipoPago(id);
         TipoPago updatedTipoPago = tipoPagoRepository.save(tipoPago);

@@ -41,18 +41,14 @@ public class PaisService {
         if(!existePais){
             datos.put("error",true);
             datos.put("message","No existe el pais con ese id");
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CONFLICT
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT
             );
         }
         pais.setIdPais(id);
         datos.put("message","Se actualizo con exito");
         paisRepository.save(pais);
         datos.put("data",pais);
-        return new ResponseEntity<>(
-                datos,
-                HttpStatus.CREATED
+        return new ResponseEntity<>(datos, HttpStatus.CREATED
         );
     }
 
@@ -62,16 +58,12 @@ public class PaisService {
         if(!existePais){
             datos.put("error",true);
             datos.put("message","No existe el pais con ese id");
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CONFLICT
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT
             );
         }
         paisRepository.deleteById(id);
         datos.put("message","Pais eliminado");
-        return new ResponseEntity<>(
-                datos,
-                HttpStatus.ACCEPTED
+        return new ResponseEntity<>(datos, HttpStatus.ACCEPTED
         );
     }
 

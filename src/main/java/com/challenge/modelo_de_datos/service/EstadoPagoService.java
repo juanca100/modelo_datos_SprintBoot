@@ -25,7 +25,13 @@ public class EstadoPagoService {
 
     public ResponseEntity<Object> newEstadoPago(EstadoPago estado_pago) {
         HashMap<String, Object> datos = new HashMap<>();
-        // Aquí puedes realizar las validaciones necesarias antes de guardar el EstadoPago
+        Integer id=estado_pago.getIdEstadoPago();
+        if (id!=0){
+            datos.put("error",true);
+            datos.put("message", "No mandar ID, este se genera automaticamente");
+            return new ResponseEntity<>(datos, HttpStatus.CREATED);
+
+        }
         EstadoPago nuevoEstadoPago = estadoPagoRepository.save(estado_pago);
         datos.put("message", "Se guardó con éxito");
         datos.put("data", nuevoEstadoPago);
