@@ -37,7 +37,14 @@ public class ProductoService {
             datos.put("message", "No enviar ID, este se genera automáticamente");
             return new ResponseEntity<>(datos, HttpStatus.BAD_REQUEST);
         }
-
+        if (producto.getVendedor()==null || producto.getTipoProducto()==null){
+            datos.put("error",true);
+            datos.put("message","ingresa los campos de la tabla");
+            return  new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
         // Validación de datos obligatorios
         if (producto.getNombre() == null || producto.getNombre().isEmpty()) {
             return createErrorResponse("El nombre del producto es obligatorio.", HttpStatus.BAD_REQUEST);
@@ -49,8 +56,25 @@ public class ProductoService {
         // Validación de existencia de entidad relacionada
         if (!vendedorRepository.existsById(producto.getVendedor().getIdVendedor())) {
             return createErrorResponse("El vendedor no existe en la base de datos.", HttpStatus.BAD_REQUEST);
+        }else {
+            if(producto.getDescripcion().matches("\\d+")) {
+                datos.put("error", true);
+                datos.put("message", "Los campos de caractares no deden ser numeros");
+                return new ResponseEntity<>(
+                        datos,
+                        HttpStatus.CONFLICT
+                );
+            }else{
+                if(producto.getNombre().matches("\\d+")){
+                    datos.put("error",true);
+                    datos.put("message","Los campos de caracteres no deben ser numeros");
+                    return  new ResponseEntity<>(
+                      datos,
+                      HttpStatus.CONFLICT
+                    );
+                }
+            }
         }
-
         if (!tipoProductoRepository.existsById(producto.getTipoProducto().getIdTipoProducto())) {
             return createErrorResponse("El tipo de producto no existe en la base de datos.", HttpStatus.BAD_REQUEST);
         }
@@ -63,26 +87,51 @@ public class ProductoService {
 
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
-
     public ResponseEntity<Object> updateProducto(Integer id, Producto producto) {
         HashMap<String, Object> datos = new HashMap();
         boolean existeVendedor = this.productoRepository.existsById(producto.getVendedor().getIdVendedor());
         boolean existeProducto = this.productoRepository.existsById(id);
+        boolean existeTipoProducto= this.productoRepository.existsById(producto.getTipoProducto().getIdTipoProducto());
+        if(existeProducto){
+            if(existeVendedor){
+                if(existeTipoProducto){
+                    if(producto.getDescripcion().matches("\\d+")|| producto.getDetalle().matches("\\d+")){
+                        datos.put("error",true);
+                        datos.put("message","Las campos de caracteres no deben ser numeros");
+                        return  new ResponseEntity<>(
+                          datos,
+                          HttpStatus.CONFLICT
+                        );
 
-        if (existeProducto) {
-            if (existeVendedor) {
-                producto.setIdProducto(id);
-                datos.put("message", "Se actualizó con éxito");
-                productoRepository.save(producto);
-                datos.put("data", producto);
-                return new ResponseEntity<>(datos, HttpStatus.CREATED);
-            } else {
-                datos.put("message", "El vendedor no existe");
-                return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+                    }else {
+                        datos.put("message","SE ACTUALIZO CON EXISTO");
+                        productoRepository.save(producto);
+                        datos.put("data",producto);
+                        return  new ResponseEntity<>(
+                                datos,
+                                HttpStatus.CREATED
+                        );
+                    }
+                }else {
+                    datos.put("message","EL tipo producto no existe");
+                    return new ResponseEntity<>(
+                      datos,
+                      HttpStatus.CONFLICT
+                    );
+                }
+            }else {
+                datos.put("message","El vendedor no existe");
+                return  new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+                );
             }
-        } else {
-            datos.put("message", "El producto no existe");
-            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+        }else {
+            datos.put("message","El producto no existe");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
         }
     }
 
