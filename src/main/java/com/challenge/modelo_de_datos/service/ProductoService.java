@@ -31,7 +31,7 @@ public class ProductoService {
 
     public ResponseEntity<Object> newProducto(Producto producto) {
         HashMap<String, Object> datos = new HashMap<>();
-        Integer id = producto.getIdProducto();
+        int id = producto.getIdProducto();
         if (id != 0) {
             datos.put("error", true);
             datos.put("message", "No enviar ID, este se genera automáticamente");
@@ -47,15 +47,15 @@ public class ProductoService {
         }
         // Validación de datos obligatorios
         if (producto.getNombre() == null || producto.getNombre().isEmpty()) {
-            return createErrorResponse("El nombre del producto es obligatorio.", HttpStatus.BAD_REQUEST);
+            return createErrorResponse("El nombre del producto es obligatorio.");
         }
         if (producto.getPrecio() <= 0.0f) {
-            return createErrorResponse("El precio del producto debe ser mayor que cero.", HttpStatus.BAD_REQUEST);
+            return createErrorResponse("El precio del producto debe ser mayor que cero.");
         }
 
         // Validación de existencia de entidad relacionada
         if (!vendedorRepository.existsById(producto.getVendedor().getIdVendedor())) {
-            return createErrorResponse("El vendedor no existe en la base de datos.", HttpStatus.BAD_REQUEST);
+            return createErrorResponse("El vendedor no existe en la base de datos.");
         }else {
             if(producto.getDescripcion().matches("\\d+")) {
                 datos.put("error", true);
@@ -76,7 +76,7 @@ public class ProductoService {
             }
         }
         if (!tipoProductoRepository.existsById(producto.getTipoProducto().getIdTipoProducto())) {
-            return createErrorResponse("El tipo de producto no existe en la base de datos.", HttpStatus.BAD_REQUEST);
+            return createErrorResponse("El tipo de producto no existe en la base de datos.");
         }
 
         // Guarda el producto en la base de datos.
@@ -88,7 +88,7 @@ public class ProductoService {
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
     public ResponseEntity<Object> updateProducto(Integer id, Producto producto) {
-        HashMap<String, Object> datos = new HashMap();
+        HashMap<String, Object> datos = new HashMap<>();
         boolean existeVendedor = this.productoRepository.existsById(producto.getVendedor().getIdVendedor());
         boolean existeProducto = this.productoRepository.existsById(id);
         boolean existeTipoProducto= this.productoRepository.existsById(producto.getTipoProducto().getIdTipoProducto());
@@ -150,9 +150,9 @@ public class ProductoService {
         return new ResponseEntity<>(datos, HttpStatus.ACCEPTED);
     }
 
-    private ResponseEntity<Object> createErrorResponse(String message, HttpStatus status) {
+    private ResponseEntity<Object> createErrorResponse(String message) {
         HashMap<String, Object> datos = new HashMap<>();
         datos.put("message", message);
-        return new ResponseEntity<>(datos, status);
+        return new ResponseEntity<>(datos, HttpStatus.BAD_REQUEST);
     }
 }
