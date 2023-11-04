@@ -5,7 +5,8 @@ import com.challenge.modelo_de_datos.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -24,17 +25,17 @@ public class CategoriaController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addCategoria(@RequestBody Categoria categoria){
+    public ResponseEntity<Object> addCategoria(@RequestBody @Valid Categoria categoria){
         return this.categoriaService.newCategoria(categoria);
     }
 
     @PutMapping(path="/Update/{idCategoria}")
-    public ResponseEntity<Object>updateCategoria(@PathVariable("idCategoria") Integer id,@RequestBody Categoria categoria){
+    public ResponseEntity<Object>updateCategoria(@PathVariable("idCategoria")@NotNull Integer id,@RequestBody @Valid Categoria categoria){
         return this.categoriaService.updateCategoria(id,categoria);
     }
 
     @DeleteMapping(path="/Delete/{idCategoria}")
-    public ResponseEntity<Object> deleteCategoria(@PathVariable("idCategoria") Integer id){
+    public ResponseEntity<Object> deleteCategoria(@PathVariable("idCategoria") @NotNull Integer id){
         return this.categoriaService.deleteCategoria(id);
     }
 }

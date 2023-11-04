@@ -31,33 +31,46 @@ public class ResenaProductoService {
 
     public ResponseEntity<Object> newResenaProducto(ResenaProducto resenaProducto) {
         HashMap<String,Object> datos= new HashMap<>();
-        //boolean existeProducto=this.productoRepository.existsById(resenaProducto.getProducto().getIdProducto());
-        //boolean existeUsuario=this.usuarioRepository.existsById(resenaProducto.getUsuario().getIdUsuario());
-        //if(existeProducto){
-          //  if(existeUsuario){
-                datos.put("message","Se guardo con exito");
-                resenaProductoRepository.save(resenaProducto);
-                datos.put("data",resenaProducto);
+        Integer id = resenaProducto.getIdResenaProducto();
+
+        if (id != 0) {
+            datos.put("error", true);
+            datos.put("message", "No enviar ID, este se genera automáticamente");
+           return new ResponseEntity<>(datos, HttpStatus.BAD_REQUEST);
+        }
+
+        if(resenaProducto.getDescripcion().isBlank()||resenaProducto.getDescripcion()==null){
+            return createErrorResponse("El nombre del producto es obligatorio.", HttpStatus.BAD_REQUEST);
+        }else{
+
+            if (resenaProducto.getDescripcion().matches("\\d+")) {
+                datos.put("error", true);
+                datos.put("message", "Las campos de caracteres no deben ser numeros");
                 return new ResponseEntity<>(
                         datos,
-                        HttpStatus.CREATED
+                        HttpStatus.CONFLICT
                 );
-           // }
-            //else{
-              //  datos.put("message","El usuario no existe");
-               // return new ResponseEntity<>(
-                 //       datos,
-                   //     HttpStatus.CREATED
-               // );
-            //}
-        //}
-        //else{
-          //  datos.put("message","El producto no existe");
-            //return new ResponseEntity<>(
-              //      datos,
-                //    HttpStatus.CREATED
-            //);
-        //}
+            }
+
+        }
+
+        if (resenaProducto.getCalificacionProducto() < 0.0f) {
+            return createErrorResponse("LA CALIFICACION DEBE SER NUMERICA POSITIVA", HttpStatus.BAD_REQUEST);
+        }
+
+        if(!usuarioRepository.existsById(resenaProducto.getUsuario().getIdUsuario())){
+            return createErrorResponse("El usuario no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
+        }
+
+        if(!productoRepository.existsById(resenaProducto.getProducto().getIdProducto())){
+            return createErrorResponse("El vendedor no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
+        }
+
+        resenaProductoRepository.save(resenaProducto);
+        datos.put("message","SE GUARDO RESEÑA CON EXITO");
+        datos.put("data",resenaProducto);
+
+        return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
     public ResponseEntity<Object> updateResenaProducto(Integer id,ResenaProducto resenaProducto) {
@@ -65,42 +78,46 @@ public class ResenaProductoService {
         boolean existeProducto=this.productoRepository.existsById(resenaProducto.getProducto().getIdProducto());
         boolean existeUsuario=this.usuarioRepository.existsById(resenaProducto.getProducto().getIdProducto());
         boolean existeResenaProducto=this.resenaProductoRepository.existsById(id);
-        if(existeProducto){
-            if(existeUsuario){
-                if(!existeResenaProducto){
-                    datos.put("error",true);
-                    datos.put("message","No hay Resena de Producto con ese id");
-                    return new ResponseEntity<>(
-                            datos,
-                            HttpStatus.CONFLICT
-                    );
+
+        if (existeResenaProducto){
+            if (existeUsuario){
+                if(existeProducto){
+
+
+                    if (resenaProducto.getDescripcion().matches("\\d+")) {
+                        datos.put("error", true);
+                        datos.put("message", "Las campos de caracteres no deben ser numeros");
+                        return new ResponseEntity<>(
+                                datos,
+                                HttpStatus.CONFLICT
+                        );
+                    }else{
+                        datos.put("message","SE ACTUALIZO CON EXITO");
+                        resenaProductoRepository.save(resenaProducto);
+                        datos.put("data",resenaProducto);
+                        return new ResponseEntity<>(datos, HttpStatus.CREATED);
+
+                    }
+
+
+
+                }else{
+                    datos.put("message", "El producto no existe");
+                    return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
                 }
-                resenaProducto.setIdResenaProducto(id);
-                datos.put("message","Se actuaslizo con exito");
-                resenaProductoRepository.save(resenaProducto);
-                datos.put("data",resenaProducto);
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CREATED
-                );
 
+            }else{
+                datos.put("message", "El usuario no existe");
+                return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
 
             }
-            else{
-                datos.put("message","El usuario no existe");
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CONFLICT
-                );
-            }
+
+        }else{
+            datos.put("message", "La reseña_producto no existe");
+            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+
         }
-        else{
-            datos.put("message","El producto no existe");
-            return new ResponseEntity<>(
-                    datos,
-                    HttpStatus.CONFLICT
-            );
-        }
+
     }
 
     public ResponseEntity<Object> deleteResenaProducto(Integer id){
@@ -120,5 +137,11 @@ public class ResenaProductoService {
                 datos,
                 HttpStatus.ACCEPTED
         );
+    }
+
+    private ResponseEntity<Object> createErrorResponse(String message, HttpStatus status) {
+        HashMap<String, Object> datos = new HashMap<>();
+        datos.put("message", message);
+        return new ResponseEntity<>(datos, status);
     }
 }
