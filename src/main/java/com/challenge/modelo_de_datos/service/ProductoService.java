@@ -106,6 +106,7 @@ public class ProductoService {
                     HttpStatus.CONFLICT
             );
         }
+        producto.setIdProducto(id);
 
         // Validación de datos obligatorios
         if (producto.getNombre() == null || producto.getNombre().isEmpty()) {
@@ -152,9 +153,8 @@ public class ProductoService {
 
     public ResponseEntity<Object> deleteProducto(Integer id) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existe = this.productoRepository.existsById(id);
 
-        if (!existe) {
+        if (!productoRepository.existsById(id)) {
             datos.put("error", true);
             datos.put("message", "No existe el producto con ese ID");
             return new ResponseEntity<>(datos, HttpStatus.CONFLICT);

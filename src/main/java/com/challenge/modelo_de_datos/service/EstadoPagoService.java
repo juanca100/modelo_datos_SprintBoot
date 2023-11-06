@@ -71,7 +71,7 @@ public class EstadoPagoService {
                     HttpStatus.BAD_REQUEST
             );
         }
-        if(estadoPagoRepository.existsById(id)){
+        if(!estadoPagoRepository.existsById(id)){
             datos.put("error", true);
             datos.put("message","El id proporcionado es erroneo");
             return new ResponseEntity<>(

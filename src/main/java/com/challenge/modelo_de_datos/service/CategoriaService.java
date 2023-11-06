@@ -140,7 +140,7 @@ public class CategoriaService {
         HashMap<String,Object> datos= new HashMap<>();
         if(!categoriaRepository.existsById(id)){
             datos.put("error",true);
-            datos.put("message","NO EXISTE ESTADO CON ESE ID");
+            datos.put("message","NO EXISTE Categoria CON ESE ID");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CONFLICT

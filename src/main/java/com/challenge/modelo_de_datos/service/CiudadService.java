@@ -149,7 +149,7 @@ public class CiudadService {
         HashMap<String,Object> datos= new HashMap<>();
         if(!ciudadRepository.existsById(id)){
             datos.put("error",true);
-            datos.put("message","No existe estado con ese id");
+            datos.put("message","No existe ciudad con ese id");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CONFLICT

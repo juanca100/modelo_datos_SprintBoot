@@ -56,8 +56,7 @@ public class InventarioService {
 
         }
 
-        boolean existeProducto = this.productoRepository.existsById(inventario.getProducto().getIdProducto());
-        if (existeProducto) {
+        if (productoRepository.existsById(inventario.getProducto().getIdProducto())) {
             datos.put("message", "Se guardó con éxito");
             inventarioRepository.save(inventario);
             datos.put("data", inventario);
