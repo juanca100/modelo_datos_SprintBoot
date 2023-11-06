@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.html.HTMLParagraphElement;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +26,6 @@ public class CategoriaService {
     public ResponseEntity<Object> newCategoria(Categoria categoria) {
         HashMap<String,Object> datos= new HashMap<>();
         Integer id= categoria.getIdCategoria();
-        System.out.println("LA CATEGORIA INGRESADA ES:"+id);
-
         //VALIDO EL ID, ES UN CAMPO QUE NO SE CEBE ENVIAR, SI SE ENVÍA ENVIAMOS MENSAJEA DE RROR
         if (id!=0){
             datos.put("error",true);
@@ -39,10 +36,7 @@ public class CategoriaService {
                     HttpStatus.BAD_REQUEST
             );
         }
-        System.out.println("SIGUI AL 100");
-
         //VALIDAMOS CAMPOS NOT NULL
-
         if(categoria.getCategoria()==null){
             datos.put("error",true);
             datos.put("message","DEBES INGRESAR EL NOMBRE DE LA CATEGORIA");
@@ -132,7 +126,7 @@ public class CategoriaService {
 
             }else{
                 datos.put("error", true);
-                datos.put("message","El id del estado proporcionado es erroneo");
+                datos.put("message","El id de la categoria proporcionado es erroneo");
                 return new ResponseEntity<>(
                         datos,
                         HttpStatus.CONFLICT

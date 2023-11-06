@@ -39,6 +39,15 @@ public class ResenaTiendaService {
             );
         }
 
+        if(resenaTienda.getDescripcion()==null||resenaTienda.getVendedor()==null||resenaTienda.getUsuario()==null){
+                datos.put("error",true);
+                datos.put("message", "Ingresa todos los campos de la tabla");
+                return new ResponseEntity<>(
+                        datos,
+                        HttpStatus.BAD_REQUEST
+                );
+        }
+
         //VALIDAR QUE LA CALIFICACION DE LA TIENDA SEAN NUMEROS POSITIVOS
         if(resenaTienda.getCalificacionTienda()<0){
             return createErrorResponse("El precio del producto debe ser mayor que cero.", HttpStatus.BAD_REQUEST);
@@ -52,21 +61,19 @@ public class ResenaTiendaService {
         //VALIDAR QUE EL USUARIO EXISTA
         if(!usuarioRepository.existsById(resenaTienda.getUsuario().getIdUsuario())){
             return createErrorResponse("El usuario no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
-        }else{
-
-            if (resenaTienda.getDescripcion().matches("\\d+")) {
-                datos.put("error", true);
-                datos.put("message", "Las campos de caracteres no deben ser numeros");
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CONFLICT
-                );
-            }
-
         }
 
         if(resenaTienda.getDescripcion().isBlank() || resenaTienda.getDescripcion()==null){
             return createErrorResponse("El campo descripcion no puede ser nulo", HttpStatus.BAD_REQUEST);
+        }
+
+        if (resenaTienda.getDescripcion().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
         }
 
         resenaTiendaRepository.save(resenaTienda);
@@ -79,49 +86,59 @@ public class ResenaTiendaService {
 
     public ResponseEntity<Object> updateResenaTienda(Integer id,ResenaTienda resenaTienda) {
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existeVendedor=this.vendedorRepository.existsById(resenaTienda.getVendedor().getIdVendedor());
-        boolean existeUsuario=this.usuarioRepository.existsById(resenaTienda.getUsuario().getIdUsuario());
-        boolean existeRT=this.resenaTiendaRepository.existsById(id);
 
-        if (existeRT){
-            if (existeUsuario){
-                if(existeVendedor){
-
-                    if (resenaTienda.getDescripcion().matches("\\d+")) {
-                        datos.put("error", true);
-                        datos.put("message", "Las campos de caracteres no deben ser numeros");
-                        return new ResponseEntity<>(
-                                datos,
-                                HttpStatus.CONFLICT
-                        );
-
-
-                    }else{
-
-                        datos.put("message","SE ACTUALIZO CON EXITO");
-                        resenaTiendaRepository.save(resenaTienda);
-                        datos.put("data",resenaTienda);
-                        return new ResponseEntity<>(datos, HttpStatus.CREATED);
-                    }
-
-
-
-                }else{
-                    datos.put("message", "El veendedor no existe");
-                    return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-                }
-
-            }else{
-                datos.put("message", "El usuario no existe");
-                return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-
-            }
-
-        }else{
-            datos.put("message", "La reseña_tienda no existe");
-            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-
+        if(resenaTienda.getDescripcion()==null||resenaTienda.getVendedor()==null||resenaTienda.getUsuario()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
         }
+
+        if(!resenaTiendaRepository.existsById(id)){
+            datos.put("error", true);
+            datos.put("message","La reseña no existe");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+
+        //VALIDAR QUE LA CALIFICACION DE LA TIENDA SEAN NUMEROS POSITIVOS
+        if(resenaTienda.getCalificacionTienda()<0){
+            return createErrorResponse("El precio del producto debe ser mayor que cero.", HttpStatus.BAD_REQUEST);
+        }
+
+        //VALIDAR QUE EL VENVEDOR EXISTA
+        if(!vendedorRepository.existsById(resenaTienda.getVendedor().getIdVendedor())){
+            return createErrorResponse("El vendedor no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
+        }
+
+        //VALIDAR QUE EL USUARIO EXISTA
+        if(!usuarioRepository.existsById(resenaTienda.getUsuario().getIdUsuario())){
+            return createErrorResponse("El usuario no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
+        }
+
+        if(resenaTienda.getDescripcion().isBlank() || resenaTienda.getDescripcion()==null){
+            return createErrorResponse("El campo descripcion no puede ser nulo", HttpStatus.BAD_REQUEST);
+        }
+
+        if (resenaTienda.getDescripcion().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+
+        resenaTienda.setIdResenaTienda(id);
+        resenaTiendaRepository.save(resenaTienda);
+        datos.put("message","SE ACTUALIZO RESEÑA CON EXITO");
+        datos.put("data",resenaTienda);
+
+        return new ResponseEntity<>(datos, HttpStatus.CREATED);
 
     }
 

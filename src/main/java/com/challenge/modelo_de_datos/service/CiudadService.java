@@ -136,7 +136,7 @@ public class CiudadService {
             }
         }else{
                 datos.put("error", true);
-                datos.put("message","El id del estado proporcionado es erroneo");
+                datos.put("message","El id de la ciudad proporcionado es erroneo");
                 return new ResponseEntity<>(
                         datos,
                         HttpStatus.CONFLICT

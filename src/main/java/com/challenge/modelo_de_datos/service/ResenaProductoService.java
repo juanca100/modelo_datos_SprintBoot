@@ -39,19 +39,17 @@ public class ResenaProductoService {
            return new ResponseEntity<>(datos, HttpStatus.BAD_REQUEST);
         }
 
+        if(resenaProducto.getDescripcion()==null||resenaProducto.getProducto()==null||resenaProducto.getUsuario()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
         if(resenaProducto.getDescripcion().isBlank()||resenaProducto.getDescripcion()==null){
             return createErrorResponse("El nombre del producto es obligatorio.", HttpStatus.BAD_REQUEST);
-        }else{
-
-            if (resenaProducto.getDescripcion().matches("\\d+")) {
-                datos.put("error", true);
-                datos.put("message", "Las campos de caracteres no deben ser numeros");
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CONFLICT
-                );
-            }
-
         }
 
         if (resenaProducto.getCalificacionProducto() < 0.0f) {
@@ -66,6 +64,15 @@ public class ResenaProductoService {
             return createErrorResponse("El vendedor no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
         }
 
+        if (resenaProducto.getDescripcion().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+
         resenaProductoRepository.save(resenaProducto);
         datos.put("message","SE GUARDO RESEÑA CON EXITO");
         datos.put("data",resenaProducto);
@@ -75,49 +82,56 @@ public class ResenaProductoService {
 
     public ResponseEntity<Object> updateResenaProducto(Integer id,ResenaProducto resenaProducto) {
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existeProducto=this.productoRepository.existsById(resenaProducto.getProducto().getIdProducto());
-        boolean existeUsuario=this.usuarioRepository.existsById(resenaProducto.getProducto().getIdProducto());
-        boolean existeResenaProducto=this.resenaProductoRepository.existsById(id);
 
-        if (existeResenaProducto){
-            if (existeUsuario){
-                if(existeProducto){
-
-
-                    if (resenaProducto.getDescripcion().matches("\\d+")) {
-                        datos.put("error", true);
-                        datos.put("message", "Las campos de caracteres no deben ser numeros");
-                        return new ResponseEntity<>(
-                                datos,
-                                HttpStatus.CONFLICT
-                        );
-                    }else{
-                        datos.put("message","SE ACTUALIZO CON EXITO");
-                        resenaProductoRepository.save(resenaProducto);
-                        datos.put("data",resenaProducto);
-                        return new ResponseEntity<>(datos, HttpStatus.CREATED);
-
-                    }
-
-
-
-                }else{
-                    datos.put("message", "El producto no existe");
-                    return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-                }
-
-            }else{
-                datos.put("message", "El usuario no existe");
-                return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-
-            }
-
-        }else{
-            datos.put("message", "La reseña_producto no existe");
-            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-
+        if(resenaProducto.getDescripcion()==null||resenaProducto.getProducto()==null||resenaProducto.getUsuario()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
         }
 
+        if(!resenaProductoRepository.existsById(id)){
+            datos.put("error", true);
+            datos.put("message","La reseña no existe");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+
+        if(resenaProducto.getDescripcion().isBlank()||resenaProducto.getDescripcion()==null){
+            return createErrorResponse("El nombre del producto es obligatorio.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (resenaProducto.getCalificacionProducto() < 0.0f) {
+            return createErrorResponse("LA CALIFICACION DEBE SER NUMERICA POSITIVA", HttpStatus.BAD_REQUEST);
+        }
+
+        if(!usuarioRepository.existsById(resenaProducto.getUsuario().getIdUsuario())){
+            return createErrorResponse("El usuario no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
+        }
+
+        if(!productoRepository.existsById(resenaProducto.getProducto().getIdProducto())){
+            return createErrorResponse("El vendedor no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
+        }
+
+        if (resenaProducto.getDescripcion().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+
+        resenaProducto.setIdResenaProducto(id);
+        resenaProductoRepository.save(resenaProducto);
+        datos.put("message","SE GUARDO RESEÑA CON EXITO");
+        datos.put("data",resenaProducto);
+
+        return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
     public ResponseEntity<Object> deleteResenaProducto(Integer id){
