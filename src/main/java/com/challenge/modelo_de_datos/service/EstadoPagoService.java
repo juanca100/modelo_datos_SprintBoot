@@ -23,33 +23,82 @@ public class EstadoPagoService {
         return estadoPagoRepository.findAll();
     }
 
-    public ResponseEntity<Object> newEstadoPago(EstadoPago estado_pago) {
+    public ResponseEntity<Object> newEstadoPago(EstadoPago estadoPago) {
         HashMap<String, Object> datos = new HashMap<>();
-        Integer id=estado_pago.getIdEstadoPago();
+        Integer id=estadoPago.getIdEstadoPago();
         if (id!=0){
             datos.put("error",true);
             datos.put("message", "No mandar ID, este se genera automaticamente");
             return new ResponseEntity<>(datos, HttpStatus.CREATED);
-
         }
-        EstadoPago nuevoEstadoPago = estadoPagoRepository.save(estado_pago);
+        if(estadoPago.getEstadoPago()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if (estadoPago.getEstadoPago().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (estadoPago.getEstadoPago().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
         datos.put("message", "Se guardó con éxito");
-        datos.put("data", nuevoEstadoPago);
+        estadoPagoRepository.save(estadoPago);
+        datos.put("data", estadoPago);
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Object> updateEstadoPago(Integer id,EstadoPago estado_pago) {
+    public ResponseEntity<Object> updateEstadoPago(Integer id,EstadoPago estadoPago) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existePagoEstado=estadoPagoRepository.existsById(id);
-        if(!existePagoEstado){
-            datos.put("error", true);
-            datos.put("message", "No existe el EstadoPago con ese ID");
-            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+        if(estadoPago.getEstadoPago()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
         }
-        estado_pago.setIdEstadoPago(id);
-        EstadoPago updatedEstadoPago = estadoPagoRepository.save(estado_pago);
-        datos.put("message", "Se actualizó con éxito");
-        datos.put("data", updatedEstadoPago);
+        if(estadoPagoRepository.existsById(id)){
+            datos.put("error", true);
+            datos.put("message","El id proporcionado es erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        estadoPago.setIdEstadoPago(id);
+        if (estadoPago.getEstadoPago().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (estadoPago.getEstadoPago().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        datos.put("message", "Se actualizo con éxito");
+        estadoPagoRepository.save(estadoPago);
+        datos.put("data", estadoPago);
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -24,17 +26,17 @@ public class PaisController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addPais(@RequestBody Pais pais){
+    public ResponseEntity<Object> addPais(@RequestBody @Valid Pais pais){
         return this.paisService.newPais(pais);
     }
 
     @PutMapping(path="/Update/{idPais}")
-    public ResponseEntity<Object>updatePais(@PathVariable("idPais") Integer id,@RequestBody Pais pais){
+    public ResponseEntity<Object>updatePais(@PathVariable("idPais") @NotNull Integer id, @RequestBody @Valid Pais pais){
         return this.paisService.updatePais(id,pais);
     }
 
     @DeleteMapping(path="/Delete/{idPais}")
-    public ResponseEntity<Object> deletePais(@PathVariable("idPais") Integer id){
+    public ResponseEntity<Object> deletePais(@PathVariable("idPais") @NotNull Integer id){
         return this.paisService.deletePais(id);
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -24,17 +26,17 @@ public class EstadoPagoController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addEstadoPago(@RequestBody EstadoPago estado_pago) {
+    public ResponseEntity<Object> addEstadoPago(@RequestBody @Valid EstadoPago estado_pago) {
         return estadoPagoService.newEstadoPago(estado_pago);
     }
 
     @PutMapping(path = "/Update/{idEstadoPago}")
-    public ResponseEntity<Object> updateEstadoPago(@PathVariable("idEstadoPago") Integer id,@RequestBody EstadoPago estado_pago) {
+    public ResponseEntity<Object> updateEstadoPago(@PathVariable("idEstadoPago") @NotNull Integer id, @RequestBody @Valid EstadoPago estado_pago) {
         return estadoPagoService.updateEstadoPago(id,estado_pago);
     }
 
     @DeleteMapping(path = "/Delete/{idEstadoPago}")
-    public ResponseEntity<Object> deleteEstadoPago(@PathVariable("idEstadoPago") Integer id) {
+    public ResponseEntity<Object> deleteEstadoPago(@PathVariable("idEstadoPago") @NotNull Integer id) {
         return estadoPagoService.deleteEstadoPago(id);
     }
 }

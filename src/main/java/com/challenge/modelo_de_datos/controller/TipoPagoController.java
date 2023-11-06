@@ -1,7 +1,6 @@
 package com.challenge.modelo_de_datos.controller;
 
 import com.challenge.modelo_de_datos.model.TipoPago;
-import com.challenge.modelo_de_datos.model.TipoProducto;
 import com.challenge.modelo_de_datos.service.TipoPagoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

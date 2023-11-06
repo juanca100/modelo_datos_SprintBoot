@@ -40,13 +40,49 @@ public class TransaccionPagoService {
     public ResponseEntity<Object> newTransaccionPago(TransaccionPago transaccionPago) {
         HashMap<String, Object> datos = new HashMap<>();
         datos.put("message", "Se guardó con éxito");
+        Integer id=transaccionPago.getIdTransaccionPago();
+        if(id!=0){
+            datos.put("error",true);
+            datos.put("message", "No mandar ID, este se genera automaticamente");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
 
         // Validación: Campos requeridos (id_transaccion, monto_total, descripcion, id_estado_pago, id_tipo_pago)
-        if ((transaccionPago.getIdTransaccionPago() == 0) || (transaccionPago.getMonto_total() == 0) || (transaccionPago.getDescripcion() == null)
+        if ((transaccionPago.getTransaccion()==null)||((Float)transaccionPago.getMonto_total() == 0) || (transaccionPago.getDescripcion() == null)
                 || (transaccionPago.getEstadoPago() == null) || (transaccionPago.getTipoPago() == null)) {
             datos.put("error", true);
             datos.put("message", "Ingresa todos los campos obligatorios");
             return new ResponseEntity<>(datos, HttpStatus.BAD_REQUEST);
+        }
+
+        if (transaccionPago.getDescripcion().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+
+        if (transaccionPago.getDescripcion().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+
+        if(transaccionPago.getMonto_total()<0){
+            datos.put("error", true);
+            datos.put("message", "Las cantidades numericas deben ser mayores a 0");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
         }
 
         // Realiza otras validaciones, como verificar que las referencias (id_transaccion, id_estado_pago, id_tipo_pago) existen en las tablas correspondientes
@@ -69,20 +105,13 @@ public class TransaccionPagoService {
         }
 
         // Guardar la TransaccionPago si todas las validaciones pasan
-        TransaccionPago nuevaTransaccionPago = transaccionPagoRepository.save(transaccionPago);
-        datos.put("data", nuevaTransaccionPago);
+        transaccionPagoRepository.save(transaccionPago);
+        datos.put("data", transaccionPago);
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
     public ResponseEntity<Object> updateTransaccionPago(Integer id, TransaccionPago transaccionPago) {
         HashMap<String, Object> datos = new HashMap();
-
-        // Validación: Existe la TransaccionPago con el ID proporcionado
-        if (!transaccionPagoRepository.existsById(id)) {
-            datos.put("error", true);
-            datos.put("message", "No existe la TransaccionPago con ese ID");
-            return new ResponseEntity<>(datos, HttpStatus.NOT_FOUND);
-        }
 
         // Validación: Campos requeridos (id_transaccion, monto_total, descripcion, id_estado_pago, id_tipo_pago)
         if (transaccionPago.getTransaccion() == null || transaccionPago.getMonto_total() == 0 || transaccionPago.getDescripcion() == null
@@ -90,6 +119,41 @@ public class TransaccionPagoService {
             datos.put("error", true);
             datos.put("message", "Ingresa todos los campos obligatorios");
             return new ResponseEntity<>(datos, HttpStatus.BAD_REQUEST);
+        }
+
+        // Validación: Existe la TransaccionPago con el ID proporcionado
+        if (!transaccionPagoRepository.existsById(id)) {
+            datos.put("error", true);
+            datos.put("message", "No existe la TransaccionPago con ese ID");
+            return new ResponseEntity<>(datos, HttpStatus.NOT_FOUND);
+        }
+        transaccionPago.setIdTransaccionPago(id);
+
+        if (transaccionPago.getDescripcion().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+
+        if (transaccionPago.getDescripcion().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+
+        if(transaccionPago.getMonto_total()<0){
+            datos.put("error", true);
+            datos.put("message", "Las cantidades numericas deben ser mayores a 0");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
         }
 
         // Realiza otras validaciones, como verificar que las referencias (id_transaccion, id_estado_pago, id_tipo_pago) existen en las tablas correspondientes
@@ -112,12 +176,10 @@ public class TransaccionPagoService {
             return new ResponseEntity<>(datos, HttpStatus.BAD_REQUEST);
         }
 
-
         // Actualizar la TransaccionPago si todas las validaciones pasan
-        transaccionPago.setIdTransaccionPago(id);
-        TransaccionPago updatedTransaccionPago = transaccionPagoRepository.save(transaccionPago);
+        transaccionPagoRepository.save(transaccionPago);
         datos.put("message", "Se actualizó con éxito");
-        datos.put("data", updatedTransaccionPago);
+        datos.put("data", transaccionPago);
         return new ResponseEntity<>(datos, HttpStatus.OK);
     }
 

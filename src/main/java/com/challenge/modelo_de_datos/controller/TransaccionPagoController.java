@@ -5,6 +5,9 @@ import com.challenge.modelo_de_datos.service.TransaccionPagoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -23,17 +26,17 @@ public class TransaccionPagoController {
     }
 
     @PostMapping(path="/Create")
-    public ResponseEntity<Object> addTransaccionPago(@RequestBody TransaccionPago transaccionPago) {
+    public ResponseEntity<Object> addTransaccionPago(@RequestBody @Valid TransaccionPago transaccionPago) {
         return transaccionPagoService.newTransaccionPago(transaccionPago);
     }
 
     @PutMapping(path = "/Update/{idTransaccionPago}")
-    public ResponseEntity<Object> updateTransaccionPago(@PathVariable("idTransaccionPago") Integer id,@RequestBody TransaccionPago transaccionPago) {
+    public ResponseEntity<Object> updateTransaccionPago(@PathVariable("idTransaccionPago") @NotNull Integer id, @RequestBody @Valid TransaccionPago transaccionPago) {
         return transaccionPagoService.updateTransaccionPago(id,transaccionPago);
     }
 
     @DeleteMapping(path = "/Delete/{idTransaccionPago}")
-    public ResponseEntity<Object> deleteTransaccionPago(@PathVariable("idTransaccionPago") Integer id) {
+    public ResponseEntity<Object> deleteTransaccionPago(@PathVariable("idTransaccionPago") @NotNull Integer id) {
         return transaccionPagoService.deleteTransaccionPago(id);
     }
 }

@@ -24,36 +24,83 @@ public class TipoPagoService {
 
     public ResponseEntity<Object> newTipoPago(TipoPago tipoPago) {
         HashMap<String, Object> datos = new HashMap<>();
-        // Aquí puedes realizar las validaciones necesarias antes de guardar el TipoPago
-        TipoPago nuevoTipoPago = tipoPagoRepository.save(tipoPago);
+        Integer id=tipoPago.getIdTipoPago();
+        if(id!=0){
+            datos.put("error",true);
+            datos.put("message", "No mandar ID, este se genera automaticamente");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if(tipoPago.getTipoPago()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if (tipoPago.getTipoPago().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (tipoPago.getTipoPago().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
         datos.put("message", "Se guardó con éxito");
-        datos.put("data", nuevoTipoPago);
+        tipoPagoRepository.save(tipoPago);
+        datos.put("data", tipoPago);
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
     public ResponseEntity<Object> updateTipoPago(Integer id, TipoPago tipoPago) {
         HashMap<String, Object> datos = new HashMap<>();
-        // Aquí puedes realizar las validaciones necesarias antes de actualizar el TipoPago
-        if (!tipoPagoRepository.existsById(id)) {
+        if(tipoPago.getTipoPago()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if(!tipoPagoRepository.existsById(id)){
             datos.put("error", true);
-            datos.put("message", "No existe el TipoPago con ese ID");
-            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-
-        } else {
-            if (tipoPagoRepository.existsById((id))) {
-                tipoPago.setIdTipoPago(id);
-                if (tipoPago.getTipoPago().isEmpty()) {
-                    datos.put("error", true);
-                    datos.put("message", "Los campos de caracteres no deben estar vacios");
-                    return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-
-                }
-            }
+            datos.put("message","El id proporcionado es erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
         }
         tipoPago.setIdTipoPago(id);
-        TipoPago updatedTipoPago = tipoPagoRepository.save(tipoPago);
-        datos.put("message", "Se actualizó con éxito");
-        datos.put("data", updatedTipoPago);
+        if (tipoPago.getTipoPago().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (tipoPago.getTipoPago().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        datos.put("message", "Se actualizo con éxito");
+        tipoPagoRepository.save(tipoPago);
+        datos.put("data", tipoPago);
         return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 

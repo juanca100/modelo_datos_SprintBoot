@@ -26,6 +26,39 @@ public class PaisService {
 
     public ResponseEntity<Object> newPais(Pais pais) {
         HashMap<String,Object> datos= new HashMap<>();
+        Integer id=pais.getIdPais();
+        if(id!=0){
+            datos.put("error",true);
+            datos.put("message", "No mandar ID, este se genera automaticamente");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if(pais.getPais()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if (pais.getPais().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (pais.getPais().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
         datos.put("message","Se guardo con exito");
         paisRepository.save(pais);
         datos.put("data",pais);
@@ -37,14 +70,39 @@ public class PaisService {
 
     public ResponseEntity<Object> updatePais(Integer id,Pais pais) {
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existePais=this.paisRepository.existsById(id);
-        if(!existePais){
+        if(pais.getPais()==null){
             datos.put("error",true);
-            datos.put("message","No existe el pais con ese id");
-            return new ResponseEntity<>(datos, HttpStatus.CONFLICT
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if(!paisRepository.existsById(id)){
+            datos.put("error", true);
+            datos.put("message", "El pais no existe, ID erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CREATED
             );
         }
         pais.setIdPais(id);
+        if (pais.getPais().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (pais.getPais().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
         datos.put("message","Se actualizo con exito");
         paisRepository.save(pais);
         datos.put("data",pais);
@@ -54,8 +112,7 @@ public class PaisService {
 
     public ResponseEntity<Object> deletePais(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existePais=this.paisRepository.existsById(id);
-        if(!existePais){
+        if(!paisRepository.existsById(id)){
             datos.put("error",true);
             datos.put("message","No existe el pais con ese id");
             return new ResponseEntity<>(datos, HttpStatus.CONFLICT
