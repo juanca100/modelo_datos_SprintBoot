@@ -38,7 +38,7 @@ public class InventarioService {
             );
         }
 
-        if(inventario.getProducto()==null){
+        if(inventario.getProducto()==null||(Integer)inventario.getStockInicial()==0||(Integer)inventario.getStockMinimo()==0){
             datos.put("error",true);
             datos.put("message", "Ingresa todos los campos de la tabla");
             return new ResponseEntity<>(
@@ -77,7 +77,7 @@ public class InventarioService {
     public ResponseEntity<Object> updateInventario(Integer id, Inventario inventario) {
         HashMap<String, Object> datos = new HashMap<>();
 
-        if(inventario.getProducto()==null||(Integer)inventario.getEntrada()==0||(Integer)inventario.getSalida()==0){
+        if(inventario.getProducto()==null||(Integer)inventario.getEntrada()==0||(Integer)inventario.getSalida()==0||(Integer)inventario.getStockInicial()==0||(Integer)inventario.getStockMinimo()==0){
             datos.put("error",true);
             datos.put("message", "Ingresa todos los campos de la tabla");
             return new ResponseEntity<>(
@@ -116,9 +116,8 @@ public class InventarioService {
 
     public ResponseEntity<Object> deleteInventario(Integer id) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existeInventario = this.inventarioRepository.existsById(id);
 
-        if (!existeInventario) {
+        if (!inventarioRepository.existsById(id)) {
             datos.put("error", true);
             datos.put("message", "No existe el inventario con ese ID");
             return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
