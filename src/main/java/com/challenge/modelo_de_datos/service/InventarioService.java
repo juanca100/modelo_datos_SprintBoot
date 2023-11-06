@@ -28,8 +28,7 @@ public class InventarioService {
 
     public ResponseEntity<Object> newInventario(Inventario inventario) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existeProducto = this.productoRepository.existsById(inventario.getProducto().getIdProducto());
-        int id= inventario.getIdInventario();
+        Integer id= inventario.getIdInventario();
         if(id!=0){
             datos.put("error",true);
             datos.put("message", "No mandar ID, este se genera automaticamente");
@@ -38,9 +37,16 @@ public class InventarioService {
                     HttpStatus.BAD_REQUEST
             );
         }
-        if (inventario.getEntrada()<=0){
-            return createErrorResponse("La entrada del inventario debe ser mayor que cero.");
+
+        if(inventario.getProducto()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
         }
+
         if (inventario.getStockInicial()<=0){
             return createErrorResponse("El stock inicial del inventario debe ser mayor que cero.");
 
@@ -49,6 +55,8 @@ public class InventarioService {
             return createErrorResponse("el stock minimo del inventario debe ser mayor que cero.");
 
         }
+
+        boolean existeProducto = this.productoRepository.existsById(inventario.getProducto().getIdProducto());
         if (existeProducto) {
             datos.put("message", "Se guardó con éxito");
             inventarioRepository.save(inventario);
@@ -68,24 +76,42 @@ public class InventarioService {
 
     public ResponseEntity<Object> updateInventario(Integer id, Inventario inventario) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existeInventario = this.inventarioRepository.existsById(id);
-        boolean existeProducto = this.productoRepository.existsById(inventario.getProducto().getIdProducto());
 
-        if (existeInventario) {
-            if (existeProducto) {
-                inventario.setIdInventario(id);
-                datos.put("message", "Se actualizó con éxito");
-                inventarioRepository.save(inventario);
-                datos.put("data", inventario);
-                return new ResponseEntity<>(datos, HttpStatus.CREATED);
-            } else {
-                datos.put("message", "El ID de producto no existe");
-                return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-            }
-        } else {
-            datos.put("message", "El inventario con ese ID no existe");
-            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+        if(inventario.getProducto()==null||(Integer)inventario.getEntrada()==0||(Integer)inventario.getSalida()==0){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
         }
+
+        if (inventario.getStockInicial()<=0){
+            return createErrorResponse("El stock inicial del inventario debe ser mayor que cero.");
+
+        }
+        if (inventario.getStockMinimo()<=0){
+            return createErrorResponse("el stock minimo del inventario debe ser mayor que cero.");
+
+        }
+
+        if(!this.inventarioRepository.existsById(id)){
+            datos.put("error", true);
+            datos.put("message","El id proporcionado es erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        inventario.setIdInventario(id);
+        if (this.productoRepository.existsById(inventario.getProducto().getIdProducto())) {
+            datos.put("message", "Se guardó con éxito");
+            inventarioRepository.save(inventario);
+            datos.put("data", inventario);
+        } else {
+            datos.put("message", "El producto no existe");
+        }
+        return new ResponseEntity<>(datos, HttpStatus.CREATED);
     }
 
     public ResponseEntity<Object> deleteInventario(Integer id) {

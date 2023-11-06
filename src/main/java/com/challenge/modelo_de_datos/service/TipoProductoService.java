@@ -29,17 +29,50 @@ public class TipoProductoService {
 
     public ResponseEntity<Object> newTipoProducto(TipoProducto tipoProducto) {
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.CategoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria());
-        if(existe){
-            datos.put("message","Se guardo con exito");
-            TipoProductoRepository.save(tipoProducto);
-            datos.put("data",tipoProducto);
+        Integer id=tipoProducto.getIdTipoProducto();
+        if(id!=0){
+            datos.put("error",true);
+            datos.put("message", "No mandar ID, este se genera automaticamente");
             return new ResponseEntity<>(
-                datos,
-                HttpStatus.CREATED
-                );
-            }
-        datos.put("message","La categoria no existe");
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if(tipoProducto.getTipoProducto()==null||tipoProducto.getCategoria()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if (tipoProducto.getTipoProducto().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (tipoProducto.getTipoProducto().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if(!CategoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria())){
+            datos.put("error", true);
+            datos.put("message", "La categoria no existe, ID erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CREATED
+            );
+        }
+        datos.put("message", "Se guardó con éxito");
+        TipoProductoRepository.save(tipoProducto);
+        datos.put("data", tipoProducto);
         return new ResponseEntity<>(
                 datos,
                 HttpStatus.CREATED
@@ -48,27 +81,50 @@ public class TipoProductoService {
 
     public ResponseEntity<Object> updateTipoProducto(Integer id,TipoProducto tipoProducto) {
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existe=this.CategoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria());
-        boolean existeTP=this.TipoProductoRepository.existsById(id);
-        if(existe){
-            if(!existeTP){
-                datos.put("error",true);
-                datos.put("message","No existe el tipo de producto con ese id");
-                return new ResponseEntity<>(
-                        datos,
-                        HttpStatus.CONFLICT
-                );
-            }
-            tipoProducto.setIdTipoProducto(id);
-            datos.put("message","Se actualizo con exito");
-            TipoProductoRepository.save(tipoProducto);
-            datos.put("data",tipoProducto);
+        if(tipoProducto.getTipoProducto()==null||tipoProducto.getCategoria()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if(!TipoProductoRepository.existsById(id)){
+            datos.put("error", true);
+            datos.put("message","El id del tipo de producto proporcionado es erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        tipoProducto.setIdTipoProducto(id);
+        if (tipoProducto.getTipoProducto().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (tipoProducto.getTipoProducto().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if(!CategoriaRepository.existsById(tipoProducto.getCategoria().getIdCategoria())){
+            datos.put("error", true);
+            datos.put("message", "La categoria no existe, ID erroneo");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CREATED
             );
         }
-        datos.put("message","La categoria no existe");
+        datos.put("message", "Se guardó con éxito");
+        TipoProductoRepository.save(tipoProducto);
+        datos.put("data", tipoProducto);
         return new ResponseEntity<>(
                 datos,
                 HttpStatus.CREATED
@@ -77,8 +133,7 @@ public class TipoProductoService {
 
     public ResponseEntity<Object> deleteTipoProducto(Integer id){
         HashMap<String,Object> datos= new HashMap<>();
-        boolean existeTP=this.TipoProductoRepository.existsById(id);
-        if(!existeTP){
+        if(!TipoProductoRepository.existsById(id)){
             datos.put("error",true);
             datos.put("message","No existe el tipo de producto con ese id");
             return new ResponseEntity<>(

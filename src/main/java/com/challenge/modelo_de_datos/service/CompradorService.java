@@ -31,58 +31,128 @@ public class CompradorService {
 
     public ResponseEntity<Object> newComprador(Comprador comprador) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existeUsuario = this.usuarioRepository.existsById(comprador.getUsuario().getIdUsuario());
-        boolean existeCiudad = this.ciudadRepository.existsById(comprador.getCiudad().getIdCiudad());
-
-        if (existeUsuario) {
-            if (existeCiudad) {
-                datos.put("message", "Se guardó con éxito");
-                compradorRepository.save(comprador);
-                datos.put("data", comprador);
-                return new ResponseEntity<>(datos, HttpStatus.CREATED);
-            } else {
-                datos.put("message", "La ciudad no existe");
-                return new ResponseEntity<>(datos, HttpStatus.CREATED);
-            }
-        } else {
-            datos.put("message", "El usuario no existe");
-            return new ResponseEntity<>(datos, HttpStatus.CREATED);
+        Integer id=comprador.getIdComprador();
+        if(id!=0){
+            datos.put("error",true);
+            datos.put("message", "No mandar ID, este se genera automaticamente");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
         }
+        if(comprador.getCiudad()==null||comprador.getUsuario()==null||comprador.getDireccion()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if (comprador.getDireccion().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (comprador.getDireccion().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if(!usuarioRepository.existsById(comprador.getUsuario().getIdUsuario())){
+            datos.put("error", true);
+            datos.put("message", "Elusuario no existe, ID erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CREATED
+            );
+        }
+        if(!ciudadRepository.existsById(comprador.getCiudad().getIdCiudad())){
+            datos.put("error", true);
+            datos.put("message", "Elusuario no existe, ID erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CREATED
+            );
+        }
+        datos.put("message", "Se guardó con éxito");
+        compradorRepository.save(comprador);
+        datos.put("data", comprador);
+        return new ResponseEntity<>(
+                datos,
+                HttpStatus.CREATED
+        );
     }
 
     public ResponseEntity<Object> updateComprador(Integer id, Comprador comprador) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existeUsuario = this.usuarioRepository.existsById(comprador.getUsuario().getIdUsuario());
-        boolean existeCiudad = this.ciudadRepository.existsById(comprador.getCiudad().getIdCiudad());
-        boolean existeComprador = this.compradorRepository.existsById(id);
-
-        if (existeUsuario) {
-            if (existeCiudad) {
-                if (!existeComprador) {
-                    datos.put("error", true);
-                    datos.put("message", "No existe el comprador con ese ID");
-                    return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-                }
-                comprador.setIdComprador(id);
-                datos.put("message", "Se actualizó con éxito");
-                compradorRepository.save(comprador);
-                datos.put("data", comprador);
-                return new ResponseEntity<>(datos, HttpStatus.CREATED);
-            } else {
-                datos.put("message", "La ciudad no existe");
-                return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
-            }
-        } else {
-            datos.put("message", "El usuario no existe");
-            return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
+        if(comprador.getCiudad()==null||comprador.getUsuario()==null||comprador.getDireccion()==null){
+            datos.put("error",true);
+            datos.put("message", "Ingresa todos los campos de la tabla");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.BAD_REQUEST
+            );
         }
+        if(!compradorRepository.existsById(id)){
+            datos.put("error", true);
+            datos.put("message","El id del comprador proporcionado es erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        comprador.setIdComprador(id);
+        if (comprador.getDireccion().isBlank()) {
+            datos.put("error", true);
+            datos.put("message", "Los campos de caracteres no deben estar vacios");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if (comprador.getDireccion().matches("\\d+")) {
+            datos.put("error", true);
+            datos.put("message", "Las campos de caracteres no deben ser numeros");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CONFLICT
+            );
+        }
+        if(!usuarioRepository.existsById(comprador.getUsuario().getIdUsuario())){
+            datos.put("error", true);
+            datos.put("message", "Elusuario no existe, ID erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CREATED
+            );
+        }
+        if(!ciudadRepository.existsById(comprador.getCiudad().getIdCiudad())){
+            datos.put("error", true);
+            datos.put("message", "Elusuario no existe, ID erroneo");
+            return new ResponseEntity<>(
+                    datos,
+                    HttpStatus.CREATED
+            );
+        }
+        datos.put("message", "Se guardó con éxito");
+        compradorRepository.save(comprador);
+        datos.put("data", comprador);
+        return new ResponseEntity<>(
+                datos,
+                HttpStatus.CREATED
+        );
     }
 
     public ResponseEntity<Object> deleteComprador(Integer id) {
         HashMap<String, Object> datos = new HashMap<>();
-        boolean existeComprador = this.compradorRepository.existsById(id);
 
-        if (!existeComprador) {
+        if (!compradorRepository.existsById(id)) {
             datos.put("error", true);
             datos.put("message", "No existe el comprador con ese ID");
             return new ResponseEntity<>(datos, HttpStatus.CONFLICT);
