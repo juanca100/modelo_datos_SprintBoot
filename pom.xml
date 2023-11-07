@@ -58,7 +58,16 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>7.0.1.Final</version> <!-- Versión actual puede variar -->
 		</dependency>
-
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.10.5</version> <!-- Asegúrate de usar la versión más reciente -->
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.10.5</version>
+		</dependency>
 	</dependencies>
 
 	<build>
