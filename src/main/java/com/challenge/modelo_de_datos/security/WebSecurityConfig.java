@@ -25,7 +25,7 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
         JWTAuthenticationFilter jwtAuthenticationFilter= new JWTAuthenticationFilter();
         jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
-        jwtAuthenticationFilter.setFilterProcessesUrl("api/v1/login");
+        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
         return  httpSecurity
                 .csrf().disable()
                 .authorizeRequests()
@@ -66,5 +66,9 @@ public class WebSecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    public static void main (String [] args){
+        System.out.println("pass"+ new BCryptPasswordEncoder().encode("prueba123"));
     }
 }

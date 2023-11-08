@@ -14,19 +14,19 @@ public class Usuario {
     int idUsuario;
 
     String nombre;
-
-    String correo_electronico;
-
-    String contrasenia;
+    @Column(name = "correo_electronico")
+    String email;
+    @Column(name = "contrasenia")
+    String password;
 
     public Usuario(){
 
     }
 
-    public Usuario(int idUsuario, String nombre, String correo_electronico, String contrasenia) {
+    public Usuario(int idUsuario, String nombre, String email, String password) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
-        this.correo_electronico = correo_electronico;
-        this.contrasenia = contrasenia;
+        this.email = email;
+        this.password = password;
     }
 }

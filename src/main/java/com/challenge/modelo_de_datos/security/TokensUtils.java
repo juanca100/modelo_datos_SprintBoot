@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class TokensUtils {
-    private final static String ACCESS_TOKEN_SECRET = "eyJhbGciOiJIUzI1NiJ9";
+    private final static String ACCESS_TOKEN_SECRET = "yu6bfbiEK3khm4NbITvqShoQ1pP4wKAO8H9EGMOukjqkr66vF/3Ah4JsRanbD/Fe\n";
     private final static Long ACCESS_TOKEN_VALIDITY_SECONDS = 2_592_00L;
 
     public static String createToken(String nombre, String email) {

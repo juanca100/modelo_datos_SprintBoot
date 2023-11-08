@@ -15,10 +15,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String correo_electronico) throws UsernameNotFoundException {
         Usuario usuario =usuarioRepository
-                .findOneByEmail(email)
-                .orElseThrow(()-> new UsernameNotFoundException("El usuario con el correo " + email + "no existe"));
+                .findOneByEmail(correo_electronico)
+                .orElseThrow(()-> new UsernameNotFoundException("El usuario con el correo " + correo_electronico + "no existe"));
         return new UserDetailsImpl(usuario);
     }
 }

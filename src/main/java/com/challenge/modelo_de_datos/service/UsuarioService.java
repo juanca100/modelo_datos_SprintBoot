@@ -34,7 +34,7 @@ public class UsuarioService {
                     HttpStatus.BAD_REQUEST
             );
         }
-        if(usuario.getNombre()==null||usuario.getCorreo_electronico()==null||usuario.getContrasenia()==null) {
+        if(usuario.getNombre()==null||usuario.getEmail()==null||usuario.getPassword()==null) {
             datos.put("error", true);
             datos.put("message", "Ingresa todos los campos de la tabla excepto el ID");
             return new ResponseEntity<>(
@@ -43,7 +43,7 @@ public class UsuarioService {
             );
         }
         else{
-            if (usuario.getNombre().isBlank()||usuario.getCorreo_electronico().isBlank()||usuario.getContrasenia().isBlank()) {
+            if (usuario.getNombre().isBlank()||usuario.getEmail().isBlank()||usuario.getPassword().isBlank()) {
                 datos.put("error", true);
                 datos.put("message", "Los campos de texto no deben estar vacios");
                 return new ResponseEntity<>(
@@ -52,7 +52,7 @@ public class UsuarioService {
                 );
             }
             else{
-                if (usuario.getNombre().matches("\\d+")||usuario.getCorreo_electronico().matches("\\d+")) {
+                if (usuario.getNombre().matches("\\d+")||usuario.getEmail().matches("\\d+")) {
                     datos.put("error", true);
                     datos.put("message", "Las campos de texto no deben ser numeros");
                     return new ResponseEntity<>(
@@ -75,7 +75,7 @@ public class UsuarioService {
 
     public ResponseEntity<Object> updateUsuario(Integer id,Usuario usuario) {
         HashMap<String,Object> datos= new HashMap<>();
-        if(usuario.getNombre()==null||usuario.getCorreo_electronico()==null||usuario.getContrasenia()==null) {
+        if(usuario.getNombre()==null||usuario.getEmail()==null||usuario.getPassword()==null) {
             datos.put("error", true);
             datos.put("message", "Ingresa todos los campos de la tabla excepto el ID");
             return new ResponseEntity<>(
@@ -86,7 +86,7 @@ public class UsuarioService {
         else{
             if(usuarioRepository.existsById(id)) {
                 usuario.setIdUsuario(id);
-                if (usuario.getNombre().isBlank()||usuario.getCorreo_electronico().isBlank()||usuario.getContrasenia().isBlank()) {
+                if (usuario.getNombre().isBlank()||usuario.getEmail().isBlank()||usuario.getPassword().isBlank()) {
                     datos.put("error", true);
                     datos.put("message", "Los campos de texto no deben estar vacios");
                     return new ResponseEntity<>(
@@ -95,7 +95,7 @@ public class UsuarioService {
                     );
                 }
                 else{
-                    if (usuario.getNombre().matches("\\d+")||usuario.getCorreo_electronico().matches("\\d+")) {
+                    if (usuario.getNombre().matches("\\d+")||usuario.getEmail().matches("\\d+")) {
                         datos.put("error", true);
                         datos.put("message", "Las campos de texto no deben ser numeros");
                         return new ResponseEntity<>(
