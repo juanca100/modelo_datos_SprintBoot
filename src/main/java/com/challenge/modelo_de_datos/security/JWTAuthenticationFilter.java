@@ -25,7 +25,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UsernamePasswordAuthenticationToken usernamePAT=new UsernamePasswordAuthenticationToken(
                 authCredentials.getEmail(),
                 authCredentials.getPassword(),
-                Collections.emptyList()
+                Collections.emptyList()//roles
         );
         return getAuthenticationManager().authenticate(usernamePAT);
     }
@@ -35,7 +35,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserDetailsImpl userDetails=(UserDetailsImpl) authResult.getPrincipal();
         String token = TokensUtils.createToken(userDetails.getNombre(),userDetails.getUsername());
         response.addHeader("Authorization","Bearer "+ token);
-        response.getWriter().flush();
+        response.getWriter().flush();//escribir toda la respuesta
         super.successfulAuthentication(request, response, chain, authResult);
     }
 }

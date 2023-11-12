@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
 public class WebSecurityConfig {
     private  final UserDetailsService userDetailsService;
@@ -27,15 +29,21 @@ public class WebSecurityConfig {
         jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
         jwtAuthenticationFilter.setFilterProcessesUrl("/login");
         return  httpSecurity
+                //inhabilitar crsf---
                 .csrf().disable()
+                //acceso a urls y endpoints----
                 .authorizeRequests()
+                .requestMatchers("api/v1/Producto").permitAll()
                 .anyRequest()
                 .authenticated()
+                //autenticacion basica
                 .and()
                 .httpBasic()
+                //configurar politica de la sesion ---
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //añadir filtros
                 .and()
                 .addFilter(jwtAuthenticationFilter)
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -55,6 +63,8 @@ public class WebSecurityConfig {
     }
 
    */
+
+    //Controlar la authenticationManager
     @Bean
     AuthenticationManager  authenticationManager (HttpSecurity httpSecurity, PasswordEncoder passwordEncoder) throws Exception {
         return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class)
@@ -69,6 +79,6 @@ public class WebSecurityConfig {
     }
 
     public static void main (String [] args){
-        System.out.println("pass"+ new BCryptPasswordEncoder().encode("prueba123"));
+        System.out.println("pass"+ new BCryptPasswordEncoder().encode("1234567890"));
     }
 }

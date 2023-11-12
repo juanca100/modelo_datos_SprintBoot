@@ -4,6 +4,7 @@ import com.challenge.modelo_de_datos.model.Notificacion;
 import com.challenge.modelo_de_datos.service.NotificacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ public class NotificacionController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_Admin')")
     public List<Notificacion> getNotificaciones(){
         return this.notificacionService.getNotificaciones();
     }

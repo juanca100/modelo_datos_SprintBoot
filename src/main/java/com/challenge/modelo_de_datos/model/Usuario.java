@@ -2,6 +2,8 @@ package com.challenge.modelo_de_datos.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.Set;
+
 
 @Getter
 @Setter
@@ -19,8 +21,15 @@ public class Usuario {
     @Column(name = "contrasenia")
     String password;
 
-    public Usuario(){
+    @ManyToMany(fetch = FetchType.EAGER) // Asegura que se carguen los roles cuando se obtenga un usuario
+    @JoinTable(
+            name = "rol_usuario",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_rol")
+    )
+    private Set<Rol> roles;
 
+    public Usuario(){
     }
 
     public Usuario(int idUsuario, String nombre, String email, String password) {
