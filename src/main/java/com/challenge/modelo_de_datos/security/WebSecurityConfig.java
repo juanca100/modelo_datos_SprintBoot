@@ -34,7 +34,12 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 //acceso a urls y endpoints----
                 .authorizeRequests()
+                .requestMatchers("api/v1/Categoria").permitAll()
                 .requestMatchers("api/v1/Producto").permitAll()
+                .requestMatchers("api/v1/ResenaProducto").permitAll()
+                .requestMatchers("api/v1/ResenaTienda").permitAll()
+                .requestMatchers("api/v1/TipoProducto").permitAll()
+                .requestMatchers("api/v1/Usuario/Create").permitAll()
                 .anyRequest()
                 .authenticated()
                 //autenticacion basica

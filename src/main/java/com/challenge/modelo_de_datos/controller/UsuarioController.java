@@ -4,6 +4,7 @@ import com.challenge.modelo_de_datos.model.Usuario;
 import com.challenge.modelo_de_datos.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ public class UsuarioController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('Admin')")
     public List<Usuario> getUsuarios(){
         return this.usuarioService.getUsuarios();
     }
@@ -30,11 +32,13 @@ public class UsuarioController {
     }
 
     @PutMapping(path="/Update/{idUsuario}")
+    @PreAuthorize("hasAnyRole('Admin', 'Usuario')")
     public ResponseEntity<Object>updateUsuario(@PathVariable("idUsuario") @NotNull Integer id, @RequestBody @Valid Usuario usuario){
         return this.usuarioService.updateUsuario(id,usuario);
     }
 
     @DeleteMapping(path="/Delete/{idUsuario}")
+    @PreAuthorize("hasAnyRole('Admin', 'Usuario')")
     public ResponseEntity<Object> deleteUsuario(@PathVariable("idUsuario") @NotNull Integer id){
         return this.usuarioService.deleteUsuario(id);
     }

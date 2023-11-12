@@ -4,6 +4,7 @@ import com.challenge.modelo_de_datos.model.TipoProducto;
 import com.challenge.modelo_de_datos.service.TipoProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -25,16 +26,19 @@ public class TipoProductoController {
     }
 
     @PostMapping(path="/Create")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<Object> addTipoProducto(@RequestBody @Valid TipoProducto tipoProducto){
         return this.tipoProductoService.newTipoProducto(tipoProducto);
     }
 
     @PutMapping(path = "/Update/{idTipoProducto}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<Object>updateTipoProducto(@PathVariable("idTipoProducto") @NotNull Integer id,@RequestBody @Valid TipoProducto tipoProducto){
         return this.tipoProductoService.updateTipoProducto(id,tipoProducto);
     }
 
     @DeleteMapping(path = "/Delete/{idTipoProducto}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<Object> deleteCategoria(@PathVariable("idTipoProducto") @NotNull Integer id){
         return this.tipoProductoService.deleteTipoProducto(id);
     }

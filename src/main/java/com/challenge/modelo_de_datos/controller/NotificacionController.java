@@ -21,22 +21,25 @@ public class NotificacionController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasAnyRole('Admin','Usuario','Jefe','TrabajadorAdmin','Comprador')")
     public List<Notificacion> getNotificaciones(){
         return this.notificacionService.getNotificaciones();
     }
 
     @PostMapping(path="/Create")
+    @PreAuthorize("hasAnyRole('Admin','Jefe','TrabajadorAdmin')")
     public ResponseEntity<Object> addNotificacion(@RequestBody @Valid Notificacion notificacion){
         return this.notificacionService.newNotificacion(notificacion);
     }
 
     @PutMapping(path="/Update/{idNotificacion}")
+    @PreAuthorize("hasAnyRole('Admin','Jefe','TrabajadorAdmin')")
     public ResponseEntity<Object>updateNotificacion(@PathVariable("idNotificacion") @NotNull Integer id, @RequestBody @Valid Notificacion notificacion){
         return this.notificacionService.updateNotificacion(id,notificacion);
     }
 
     @DeleteMapping(path="/Delete/{idNotificacion}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<Object> deleteTipoN(@PathVariable("idNotificacion") @NotNull Integer id){
         return this.notificacionService.deleteNotificacion(id);
     }

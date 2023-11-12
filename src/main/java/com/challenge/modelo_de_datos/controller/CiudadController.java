@@ -4,6 +4,7 @@ import com.challenge.modelo_de_datos.model.Ciudad;
 import com.challenge.modelo_de_datos.service.CiudadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -21,21 +22,25 @@ public class CiudadController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('Admin', 'Usuario')")
     public List<Ciudad> getCiudades(){
         return this.ciudadService.getCiudades();
     }
 
     @PostMapping(path="/Create")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<Object> addCiudad(@RequestBody @Valid Ciudad ciudad){
         return this.ciudadService.newCiudad(ciudad);
     }
 
     @PutMapping(path="/Update/{idCiudad}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<Object>updateCiudad(@PathVariable("idCiudad") @NotNull Integer id,@RequestBody @Valid Ciudad ciudad){
         return this.ciudadService.updateCiudad(id,ciudad);
     }
 
     @DeleteMapping(path="/Delete/{idCiudad}")
+    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<Object> deleteCiudad(@PathVariable("idCiudad") @NotNull Integer id){
         return this.ciudadService.deleteCiudad(id);
     }
