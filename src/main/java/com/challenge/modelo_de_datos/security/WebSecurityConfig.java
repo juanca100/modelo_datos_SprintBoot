@@ -17,11 +17,12 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+//Clase para configurar seguridad del web security
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
 public class WebSecurityConfig {
-    private  final UserDetailsService userDetailsService;
+    private  final UserDetailServiceImpl userDetailsService;
     private  final JWTAuthorizationFilter jwtAuthorizationFilter;
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
@@ -37,8 +38,8 @@ public class WebSecurityConfig {
                 .anyRequest()
                 .authenticated()
                 //autenticacion basica
-                .and()
-                .httpBasic()
+                //.and()
+                //.httpBasic()
                 //configurar politica de la sesion ---
                 .and()
                 .sessionManagement()

@@ -10,24 +10,21 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+//clase para sobrecargar los detalles del usuario de sprint boot(correo,contraseña y roles)
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
     private final Usuario usuario;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        Set<Rol> roles = usuario.getRoles();
-
-        for (Rol rol : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_"+rol.getRol()));
-           // System.out.println(rol.getRol());
-        }
+        Set<GrantedAuthority> authorities = usuario.getRoles()
+                .stream()
+                .map(rol->new SimpleGrantedAuthority("ROLE_".concat(rol.getRol())))
+                .collect(Collectors.toSet());
         return authorities;
     }
 

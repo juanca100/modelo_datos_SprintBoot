@@ -10,16 +10,19 @@ import java.security.Key;
 import java.time.LocalDate;
 import java.util.*;
 
+//Nota el manejo de roles en token se hace aqui
+//Clase para generar tokens
 public class TokensUtils {
     private final static String ACCESS_TOKEN_SECRET = "yu6bfbiEK3khm4NbITvqShoQ1pP4wKAO8H9EGMOukjqkr66vF/3Ah4JsRanbD/Fe\n";
     private final static Long ACCESS_TOKEN_VALIDITY_SECONDS = 2_592_00L;
 
-    //Generar el token
+    //Generar el token con el nombre e email encriptado
     public static String createToken(String nombre, String email) {
         long expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS * 1_000;
         Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
         Map<String, Object> extra = new HashMap<>();
         extra.put("nombre", nombre);
+        //extra.put("roles",roles) se deben recuperar los roles con el correo electronico si se mandan al token
         return Jwts.builder()
                 .setSubject(email)//añadir usuario
                 .setExpiration(expirationDate)//fecha de expiracion de token
@@ -28,15 +31,17 @@ public class TokensUtils {
                 .compact();
 
     }
+    //Desencriptar el token empleando la firma
     public static UsernamePasswordAuthenticationToken getAuthentication(String token){
       try {
-          Claims claims = Jwts.parserBuilder()
-                  .setSigningKey(ACCESS_TOKEN_SECRET.getBytes())
+          Claims claims = Jwts.parserBuilder()//desencriptartoken
+                  .setSigningKey(ACCESS_TOKEN_SECRET.getBytes())//firma
                   .build()
-                  .parseClaimsJws(token)
+                  .parseClaimsJws(token)//mandar a claims los campos del token desencriptado
                   .getBody();
-          String email = claims.getSubject();
-          return new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
+          String email = claims.getSubject();//obtener correo electronico desencriptado del token
+          return new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());//devolver usuario
+                                                        //el primero es correo, el segundo campo es contraseña y tercero los privilegios
       }catch (JwtException e){
           return null;
       }

@@ -13,8 +13,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-
-    @Override//Recuperar el usuario de la base de datos
+    @Override//Recuperar el usuario con todos sus datos de la base de datos
     public UserDetails loadUserByUsername(String correo_electronico) throws UsernameNotFoundException {
         Usuario usuario =usuarioRepository
                 .findOneByEmail(correo_electronico)

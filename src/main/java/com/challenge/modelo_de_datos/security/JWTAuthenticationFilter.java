@@ -13,7 +13,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 import java.util.Collections;
 
+//autentificar y crear tokens
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    //autentificar que las credenciales proporcionadas sean correctas
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         AuthCredentials authCredentials=new AuthCredentials();
@@ -25,17 +28,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UsernamePasswordAuthenticationToken usernamePAT=new UsernamePasswordAuthenticationToken(
                 authCredentials.getEmail(),
                 authCredentials.getPassword(),
-                Collections.emptyList()//roles
+                Collections.emptyList()//Roles
         );
         return getAuthenticationManager().authenticate(usernamePAT);
     }
 
+    //Crear token si las credenciales son correctas
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         UserDetailsImpl userDetails=(UserDetailsImpl) authResult.getPrincipal();
-        String token = TokensUtils.createToken(userDetails.getNombre(),userDetails.getUsername());
+        String token = TokensUtils.createToken(userDetails.getNombre(),userDetails.getUsername());//Crear token
         response.addHeader("Authorization","Bearer "+ token);
         response.getWriter().flush();//escribir toda la respuesta
-        super.successfulAuthentication(request, response, chain, authResult);
+        super.successfulAuthentication(request, response, chain, authResult);//devover resultados
     }
 }

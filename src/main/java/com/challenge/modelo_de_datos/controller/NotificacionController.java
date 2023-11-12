@@ -21,7 +21,7 @@ public class NotificacionController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_Admin')")
+    @PreAuthorize("hasRole('Admin')")
     public List<Notificacion> getNotificaciones(){
         return this.notificacionService.getNotificaciones();
     }
