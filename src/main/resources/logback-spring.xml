@@ -5,7 +5,7 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <!-- Ubicacion del archivo -->
-    <property name="LOGS" value="./logs" />
+    <property name="LOGS" value="C:\Users\juan3\OneDrive\Documentos\SprintBoot\modelo_de_datos\src\main\resources\logs" />
 
     <!-- Mensaje que se mandara por consola -->
     <appender name="Console"
@@ -25,7 +25,7 @@
         <!-- Propiedad del archivo de loggers  de rotacion-->
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOGS}/bb-logger-%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${LOGS}\bb-logger-%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -35,8 +35,8 @@
     </appender>
 
     <!-- Mensaje que se mandara por un archivo de errores de loggers de rotacion -->
-    <appender name="RollingFileControllerError" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS}/bbcontrollererror-logger.log</file>
+    <appender name="RollingFileControllerWarning" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS}\bbcontrollererror-logger.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>[%-5p] [%t] [%d{ddMMyyyy HH:mm:ss}] [%c[%L]] %m %n</Pattern>
         </encoder>
@@ -56,38 +56,24 @@
     <!-- Programar loogers determinando archivos, niveles y propagacion -->
 
     <!-- el root logger establece un nivel de registro global para toda la aplicación -->
-    <root level="debug">
+    <!-- root level="debug">
         <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
-    </root>
+    </root -->
 
     <!-- los logger específicos se utilizan para controlar el registro en áreas o componentes específicos de la aplicación -->
-    <!-- LOG "mx.metaphorce.spring.blockbuster.ws" at INFO level -->
-    <logger name="mx.metaphorce" level="debug" additivity="true">
+
+    <!-- LOG para registrar loggers de acciones realizadas en el paquete com.challenge en consola  -->
+    <logger name="com.challenge" level="debug" additivity="true">
         <appender-ref ref="Console" />
     </logger>
 
-    <logger name="mx.metaphorce.blockbusterapips" level="info" additivity="true">
+    <!-- LOG para registrar loggers de acciones realizadas en el paquete com.challenge.modelo_de_datos.service en el archivo de loggers de advertencias -->
+    <logger name="com.challeng.modelo_de_datos.security" level="info" additivity="true">
         <appender-ref ref="RollingFile" />
     </logger>
-
-    <logger name="mx.metaphorce.blockbusterapips.controller" level="error" additivity="true">
-        <appender-ref ref="RollingFileControllerError" />
-    </logger>
-
-
-    <!-- LOG "org" at DEBUG level -->
-    <logger name="org.springframework" level="info" additivity="true">
-        <appender-ref ref="Console" />
-    </logger>
-
-    <!-- LOG "org" at WARN level -->
-    <logger name="org" level="warn" additivity="true">
-        <appender-ref ref="RollingFile" />
-    </logger>
-
-    <logger name="springfox" level="debug" additivity="false">
-
+    <logger name="com.challeng.modelo_de_datos.security" level="warn" additivity="true">
+        <appender-ref ref="RollingFileControllerWarning" />
     </logger>
 
 </configuration>
