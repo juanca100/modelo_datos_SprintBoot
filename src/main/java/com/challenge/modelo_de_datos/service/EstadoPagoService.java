@@ -29,7 +29,7 @@ public class EstadoPagoService {
         if (id!=0){
             datos.put("error",true);
             datos.put("message", "No mandar ID, este se genera automaticamente");
-            return new ResponseEntity<>(datos, HttpStatus.CREATED);
+            return new ResponseEntity<>(datos, HttpStatus.BAD_REQUEST);
         }
         if(estadoPago.getEstadoPago()==null){
             datos.put("error",true);

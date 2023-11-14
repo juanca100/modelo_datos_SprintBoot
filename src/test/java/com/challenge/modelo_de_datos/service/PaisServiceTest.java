@@ -77,7 +77,7 @@ class PaisServiceTest {
     void updatePais() {
         // Configuración del escenario
         int idPaisExistente= 1;
-        int idPaisNoExistente = 2; // ID que no existe
+        int idPaisNoExistente = 50; // ID que no existe
 
         when(paisRepository.existsById(idPaisExistente)).thenReturn(true);
 

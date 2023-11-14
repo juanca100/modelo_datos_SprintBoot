@@ -38,7 +38,7 @@ public class TipoNotificacionService {
             datos.put("message", "Ingresa todos los campos de la tabla excepto el ID");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CONFLICT
+                    HttpStatus.BAD_REQUEST
             );
         }
         else{
