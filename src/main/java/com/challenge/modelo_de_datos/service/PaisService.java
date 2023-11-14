@@ -83,7 +83,7 @@ public class PaisService {
             datos.put("message", "El pais no existe, ID erroneo");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.CREATED
+                    HttpStatus.CONFLICT
             );
         }
         pais.setIdPais(id);
