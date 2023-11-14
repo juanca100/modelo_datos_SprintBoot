@@ -1,8 +1,7 @@
 package com.challenge.modelo_de_datos.service;
 
-import com.challenge.modelo_de_datos.model.Categoria;
+
 import com.challenge.modelo_de_datos.model.TipoNotificacion;
-import com.challenge.modelo_de_datos.repository.CategoriaRepository;
 import com.challenge.modelo_de_datos.repository.TipoNotificacionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,52 +50,52 @@ class TipoNotificacionServiceTest {
         // TEST CUANDO LOS CAMPOS SON NULOS
         tipoNotificacion.setIdTipoNotificacion(0);
         tipoNotificacion.setTipoNotificacion(null);
-        ResponseEntity<Object> responseWithNullCategoria = tipoNotificacionService.newTipoNotificacion(tipoNotificacion);
-        assertEquals(HttpStatus.BAD_REQUEST, responseWithNullCategoria.getStatusCode());
-        assertTrue(responseWithNullCategoria.getBody() instanceof HashMap);
+        ResponseEntity<Object> responseWithNullTipoNotificacion = tipoNotificacionService.newTipoNotificacion(tipoNotificacion);
+        assertEquals(HttpStatus.BAD_REQUEST, responseWithNullTipoNotificacion.getStatusCode());
+        assertTrue(responseWithNullTipoNotificacion.getBody() instanceof HashMap);
 
         // TEST CUANDO LOS CAMPOS ESTAN EN BLANCOS
         tipoNotificacion.setTipoNotificacion("");
-        ResponseEntity<Object> responseWithBlankCategoria = tipoNotificacionService.newTipoNotificacion(tipoNotificacion);
-        assertEquals(HttpStatus.CONFLICT, responseWithBlankCategoria.getStatusCode());
-        assertTrue(responseWithBlankCategoria.getBody() instanceof HashMap);
+        ResponseEntity<Object> responseWithBlankTipoNotificacion = tipoNotificacionService.newTipoNotificacion(tipoNotificacion);
+        assertEquals(HttpStatus.CONFLICT, responseWithBlankTipoNotificacion.getStatusCode());
+        assertTrue(responseWithBlankTipoNotificacion.getBody() instanceof HashMap);
 
         // TEST DE COMPROBACION DE NUMEROS
         tipoNotificacion.setTipoNotificacion("123");
-        ResponseEntity<Object> responseWithNumericCategoria = tipoNotificacionService.newTipoNotificacion(tipoNotificacion);
-        assertEquals(HttpStatus.CONFLICT, responseWithNumericCategoria.getStatusCode());
-        assertTrue(responseWithNumericCategoria.getBody() instanceof HashMap);
+        ResponseEntity<Object> responseWithNumericTipoNotificacion = tipoNotificacionService.newTipoNotificacion(tipoNotificacion);
+        assertEquals(HttpStatus.CONFLICT, responseWithNumericTipoNotificacion.getStatusCode());
+        assertTrue(responseWithNumericTipoNotificacion.getBody() instanceof HashMap);
 
         // TEST DE VALIDACION
         tipoNotificacion.setTipoNotificacion("ValidTipoNotificacion");
-        ResponseEntity<Object> responseWithValidCategoria = tipoNotificacionService.newTipoNotificacion(tipoNotificacion);
-        assertEquals(HttpStatus.CREATED, responseWithValidCategoria.getStatusCode());
-        assertTrue(responseWithValidCategoria.getBody() instanceof HashMap);
+        ResponseEntity<Object> responseWithValidTipoNotificacion = tipoNotificacionService.newTipoNotificacion(tipoNotificacion);
+        assertEquals(HttpStatus.CREATED, responseWithValidTipoNotificacion.getStatusCode());
+        assertTrue(responseWithValidTipoNotificacion.getBody() instanceof HashMap);
 
     }
 
     @Test
-    void updateCategoria() {
+    void updateTipoNotificacion() {
         // Configuración del escenario
         int idTipoNotificacionExistente = 1;
         int idTipoNotificacionNoExistente = 2; // ID que no existe
 
         when(tipoNotificacionRepository.existsById(idTipoNotificacionExistente)).thenReturn(true);
 
-        // Caso cuando el campo 'categoria' es nulo
+        // Caso cuando el campo 'tipoNotificacion' es nulo
         tipoNotificacion.setIdTipoNotificacion(idTipoNotificacionExistente);
         tipoNotificacion.setTipoNotificacion(null);
         ResponseEntity<Object> responseWithNullTipoNotificacion = tipoNotificacionService.updateTipoNotificacion(idTipoNotificacionExistente, tipoNotificacion);
         assertEquals(HttpStatus.BAD_REQUEST, responseWithNullTipoNotificacion.getStatusCode());
         assertTrue(responseWithNullTipoNotificacion.getBody() instanceof HashMap);
 
-        // Caso cuando el campo 'categoria' está en blanco
+        // Caso cuando el campo 'tipoNotificacion' está en blanco
         tipoNotificacion.setTipoNotificacion("");
         ResponseEntity<Object> responseWithBlankTipoNotificacion = tipoNotificacionService.updateTipoNotificacion(idTipoNotificacionExistente, tipoNotificacion);
         assertEquals(HttpStatus.CONFLICT, responseWithBlankTipoNotificacion.getStatusCode());
         assertTrue(responseWithBlankTipoNotificacion.getBody() instanceof HashMap);
 
-        // Caso cuando el campo 'categoria' contiene números
+        // Caso cuando el campo 'tipoNotificacion' contiene números
         tipoNotificacion.setTipoNotificacion("123");
         ResponseEntity<Object> responseWithNumericTipoNotificacion = tipoNotificacionService.updateTipoNotificacion(idTipoNotificacionExistente, tipoNotificacion);
         assertEquals(HttpStatus.CONFLICT, responseWithNumericTipoNotificacion.getStatusCode());
@@ -120,7 +119,7 @@ class TipoNotificacionServiceTest {
     }
 
     @Test
-    void deleteCategoria() {
+    void deleteTipoNotificacion() {
         // Configuración del repositorio mock
         int idToDelete = 1;
         when(tipoNotificacionRepository.existsById(idToDelete)).thenReturn(true);
