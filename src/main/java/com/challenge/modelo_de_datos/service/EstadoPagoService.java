@@ -36,7 +36,7 @@ public class EstadoPagoService {
             datos.put("message", "Ingresa todos los campos de la tabla");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatus.BAD_REQUEST
+                    HttpStatus.CONFLICT
             );
         }
         if (estadoPago.getEstadoPago().isBlank()) {
