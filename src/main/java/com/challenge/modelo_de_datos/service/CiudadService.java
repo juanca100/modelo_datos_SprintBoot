@@ -38,7 +38,7 @@ public class CiudadService {
                     HttpStatus.BAD_REQUEST
             );
         }
-        if(ciudad.getCiudad()==null||ciudad.getEstado()==null){
+        if(ciudad.getCiudad()==null || ciudad.getEstado()==null){
 
             datos.put("error",true);
             datos.put("message", "Ingresa todos los campos de la tabla");
@@ -59,7 +59,7 @@ public class CiudadService {
             }else{
                 if (ciudad.getCiudad().matches("\\d+")) {
                     datos.put("error", true);
-                    datos.put("message", "Las campos de caracteres no deben ser numeros");
+                    datos.put("message", "Los campos de caracteres no deben ser numeros");
                     return new ResponseEntity<>(
                             datos,
                             HttpStatus.CONFLICT
@@ -89,7 +89,7 @@ public class CiudadService {
 
     public ResponseEntity<Object> updateCiudad (Integer id,Ciudad ciudad) {
         HashMap<String,Object> datos= new HashMap<>();
-        if(ciudad.getCiudad()==null||ciudad.getEstado()==null){
+        if(ciudad.getCiudad()==null && ciudad.getEstado()==null){
             datos.put("error",true);
             datos.put("message","INGRESA TODOS LOS CAMPOS DE LA TABLA");
             return new ResponseEntity<>(
@@ -99,7 +99,6 @@ public class CiudadService {
         }else{
             if(ciudadRepository.existsById(id)){
                 ciudad.setIdCiudad(id);
-
                 if(ciudad.getCiudad().isBlank()){
                     datos.put("error",true);
                     datos.put("message","LOS CAMPOS DE CARACTERES NO DEBEN ESTAR VACIOS");
@@ -112,18 +111,13 @@ public class CiudadService {
                     if (ciudad.getCiudad().matches("\\d+")) {
                         datos.put("error", true);
                         datos.put("message", "Las campos de caracteres no deben ser numeros");
-                        return new ResponseEntity<>(
-                                datos,
-                                HttpStatus.CONFLICT
+                        return new ResponseEntity<>( datos,  HttpStatus.CONFLICT
                         );
                 }else{
                         if (!estadoRepository.existsById(ciudad.getEstado().getIdEstado())) {
                             datos.put("error", true);
                             datos.put("message", "El pais no existe,ID erroneo");
-                            return new ResponseEntity<>(
-                                    datos,
-                                    HttpStatus.CONFLICT
-                            );
+                            return new ResponseEntity<>( datos,  HttpStatus.CONFLICT);
                     }
                         datos.put("message","SE ACTUALIZO CON EXITO");
                         ciudadRepository.save(ciudad);
