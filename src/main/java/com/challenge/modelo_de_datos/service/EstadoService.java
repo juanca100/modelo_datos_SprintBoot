@@ -44,7 +44,7 @@ public class EstadoService {
                     HttpStatus.BAD_REQUEST
             );
         } else {
-            if (estado.getEstado().isBlank()) {
+            if (estado.getEstado().isEmpty()) {
                 datos.put("error", true);
                 datos.put("message", "Los campos de caracteres no deben estar vacios");
                 return new ResponseEntity<>(
@@ -92,7 +92,7 @@ public class EstadoService {
         } else {
             if(estadoRepository.existsById(id)) {
                 estado.setIdEstado(id);
-                if (estado.getEstado().isBlank()) {
+                if (estado.getEstado().isEmpty()) {
                     datos.put("error", true);
                     datos.put("message", "Los campos de caracteres no deben estar vacios");
                     return new ResponseEntity<>(
