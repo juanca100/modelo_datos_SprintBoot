@@ -66,7 +66,7 @@ public class CompradorService {
         }
         if(!usuarioRepository.existsById(comprador.getUsuario().getIdUsuario())){
             datos.put("error", true);
-            datos.put("message", "Elusuario no existe, ID erroneo");
+            datos.put("message", "El usuario no existe, ID erroneo");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CREATED
@@ -74,7 +74,7 @@ public class CompradorService {
         }
         if(!ciudadRepository.existsById(comprador.getCiudad().getIdCiudad())){
             datos.put("error", true);
-            datos.put("message", "Elusuario no existe, ID erroneo");
+            datos.put("message", "La Ciudad no existe, ID erroneo");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CREATED
@@ -126,7 +126,7 @@ public class CompradorService {
         }
         if(!usuarioRepository.existsById(comprador.getUsuario().getIdUsuario())){
             datos.put("error", true);
-            datos.put("message", "Elusuario no existe, ID erroneo");
+            datos.put("message", "El usuario no existe, ID erroneo");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CREATED
@@ -134,7 +134,7 @@ public class CompradorService {
         }
         if(!ciudadRepository.existsById(comprador.getCiudad().getIdCiudad())){
             datos.put("error", true);
-            datos.put("message", "Elusuario no existe, ID erroneo");
+            datos.put("message", "La Ciudad no existe, ID erroneo");
             return new ResponseEntity<>(
                     datos,
                     HttpStatus.CREATED
