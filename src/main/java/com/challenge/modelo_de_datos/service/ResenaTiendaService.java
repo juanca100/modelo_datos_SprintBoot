@@ -50,7 +50,7 @@ public class ResenaTiendaService {
 
         //VALIDAR QUE LA CALIFICACION DE LA TIENDA SEAN NUMEROS POSITIVOS
         if(resenaTienda.getCalificacionTienda()<0){
-            return createErrorResponse("El precio del producto debe ser mayor que cero.", HttpStatus.BAD_REQUEST);
+            return createErrorResponse("La calificacion debe ser positiva.", HttpStatus.BAD_REQUEST);
         }
 
         //VALIDAR QUE EL VENVEDOR EXISTA
@@ -63,7 +63,7 @@ public class ResenaTiendaService {
             return createErrorResponse("El usuario no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
         }
 
-        if(resenaTienda.getDescripcion().isBlank() || resenaTienda.getDescripcion()==null){
+        if(resenaTienda.getDescripcion().isBlank() || resenaTienda.getDescripcion().isBlank()){
             return createErrorResponse("El campo descripcion no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
 
@@ -107,7 +107,7 @@ public class ResenaTiendaService {
 
         //VALIDAR QUE LA CALIFICACION DE LA TIENDA SEAN NUMEROS POSITIVOS
         if(resenaTienda.getCalificacionTienda()<0){
-            return createErrorResponse("El precio del producto debe ser mayor que cero.", HttpStatus.BAD_REQUEST);
+            return createErrorResponse("La calificacion debe ser positiva.", HttpStatus.BAD_REQUEST);
         }
 
         //VALIDAR QUE EL VENVEDOR EXISTA
