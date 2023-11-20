@@ -101,7 +101,6 @@ class CompradorServiceTest {
         // Crea una instancia de Comprador para la prueba con campos nulos
         Comprador comprador = new Comprador();
 
-        // Llama al método que quieres probar
         ResponseEntity<Object> response = compradorService.newComprador(comprador);
 
         // Verifica el resultado
@@ -133,20 +132,13 @@ class CompradorServiceTest {
 
     @Test
     public void testNewComprador_Conflict_NumericDireccion() {
-        // Crea una instancia de Comprador para la prueba con dirección numérica
         Comprador comprador = new Comprador();
         comprador.setCiudad(new Ciudad());
         comprador.setUsuario(new Usuario());
         comprador.setDireccion("123");
-
-        // Llama al método que quieres probar
         ResponseEntity<Object> response = compradorService.newComprador(comprador);
-
-        // Verifica el resultado
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertEquals("Las campos de caracteres no deben ser numeros", ((HashMap) response.getBody()).get("message"));
-
-        // Verifica que el método save del repositorio no se haya llamado
         verify(compradorRepository, never()).save(comprador);
     }
 
