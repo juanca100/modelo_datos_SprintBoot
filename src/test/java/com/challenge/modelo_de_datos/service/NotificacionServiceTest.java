@@ -124,6 +124,17 @@ class NotificacionServiceTest {
         verify(notificacionRepository,never()).save(notificacion);
     }
 
+    @Test
+    public void testNewNotificacion_Conflict_Numeric(){
+        notificacion.setDescripcion("123");
+        notificacion.setTipoNotificacion(new TipoNotificacion());
+        notificacion.setUsuario(new Usuario());
+        ResponseEntity<Object> response = notificacionService.newNotificacion(notificacion);
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals("Las campos de texto no deben ser numeros",((HashMap) response.getBody()).get("message"));
+        verify(notificacionRepository,never()).save(notificacion);
+    }
+
 
 
     @Test
