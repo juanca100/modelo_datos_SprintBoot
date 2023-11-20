@@ -69,10 +69,10 @@
     </logger>
 
     <!-- LOG para registrar loggers de acciones realizadas en el paquete com.challenge.modelo_de_datos.service en el archivo de loggers de advertencias -->
-    <logger name="com.challeng.modelo_de_datos.security" level="info" additivity="true">
+    <logger name="com.challenge.modelo_de_datos.security" level="info" additivity="true">
         <appender-ref ref="RollingFile" />
     </logger>
-    <logger name="com.challeng.modelo_de_datos.security" level="warn" additivity="true">
+    <logger name="com.challenge.modelo_de_datos.security" level="warn" additivity="true">
         <appender-ref ref="RollingFileControllerWarning" />
     </logger>
 

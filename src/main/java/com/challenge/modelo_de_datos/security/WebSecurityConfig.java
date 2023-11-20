@@ -40,6 +40,9 @@ public class WebSecurityConfig {
                 .requestMatchers("api/v1/ResenaTienda").permitAll()
                 .requestMatchers("api/v1/TipoProducto").permitAll()
                 .requestMatchers("api/v1/Usuario/Create").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("swagger-ui/index.html").permitAll()
                 .anyRequest()
                 .authenticated()
                 //autenticacion basica
