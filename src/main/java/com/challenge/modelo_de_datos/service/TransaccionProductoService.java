@@ -89,8 +89,10 @@ public class TransaccionProductoService {
             );
         }
         else{
-            if(transaccionRepository.existsById(transaccionProducto.getTransaccion().getIdTransaccion())){
-                if(productoRepository.existsById(transaccionProducto.getProducto().getIdProducto())){
+            if(transaccionRepository.existsById(idTransaccion)){
+                transaccionProducto.getTransaccion().setIdTransaccion(idTransaccion);
+                if(productoRepository.existsById(idProducto)){
+                    transaccionProducto.getProducto().setIdProducto(idProducto);
                     if (transaccionProductoRepository.existsById(id)) {
                         transaccionProductoRepository.save(transaccionProducto);
                         datos.put("message", "Se actualizó con éxito");
