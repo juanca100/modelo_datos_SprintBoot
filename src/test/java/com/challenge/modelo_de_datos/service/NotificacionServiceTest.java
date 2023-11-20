@@ -99,6 +99,32 @@ class NotificacionServiceTest {
         verify(notificacionRepository,never()).save(notificacion);
     }
 
+    @Test
+    public void testNewNotificacion_BadRequest_ValidarIdTipoNotificacion(){
+        notificacion.setDescripcion("prueba");
+        notificacion.setTipoNotificacion(new TipoNotificacion());
+        notificacion.setUsuario(new Usuario());
+        when(tipoNotificacionRepository.existsById(notificacion.getTipoNotificacion().getIdTipoNotificacion())).thenReturn(false);
+        ResponseEntity<Object> response = notificacionService.newNotificacion(notificacion);
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals("El tipo de notificacion no existe,ID erroneo",((HashMap) response.getBody()).get("message"));
+        verify(notificacionRepository,never()).save(notificacion);
+    }
+
+    @Test
+    public void testNewNotificacion_BadRequest_ValidarIdUsuario(){
+        notificacion.setDescripcion("prueba");
+        notificacion.setTipoNotificacion(new TipoNotificacion());
+        notificacion.setUsuario(new Usuario());
+        when(tipoNotificacionRepository.existsById(notificacion.getTipoNotificacion().getIdTipoNotificacion())).thenReturn(true);
+        when(usuarioRepository.existsById(notificacion.getUsuario().getIdUsuario())).thenReturn(false);
+        ResponseEntity<Object> response = notificacionService.newNotificacion(notificacion);
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals("El usuario no existe,ID erroneo",((HashMap) response.getBody()).get("message"));
+        verify(notificacionRepository,never()).save(notificacion);
+    }
+
+
 
     @Test
     public void testUpdateNotificacion_Success(){
