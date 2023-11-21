@@ -48,6 +48,50 @@ public class InventarioServiceTest {
     }
 
     @Test
+    public void testNewInventario_BadRequest_Invalid(){
+        inventario.setIdInventario(1);
+        ResponseEntity<Object> response = inventarioService.newInventario(inventario);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("No mandar ID, este se genera automaticamente", ((HashMap) response.getBody()).get("message"));
+        verify(inventarioRepository,never()).save(inventario);
+    }
+
+    @Test
+    public void testNewInventario_BadRequest_Null(){
+        inventario.setIdInventario(0);
+        inventario.setProducto(null);
+        ResponseEntity<Object> response = inventarioService.newInventario(inventario);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Ingresa todos los campos de la tabla", ((HashMap) response.getBody()).get("message"));
+        verify(inventarioRepository,never()).save(inventario);
+    }
+
+    @Test
+    public void testNewInventario_StockInicial_Zero(){
+        inventario.setSalida(5);
+        inventario.setEntrada(10);
+        inventario.setStockMinimo(-10);
+        inventario.setStockInicial(-10);
+        inventario.setProducto(new Producto());
+        ResponseEntity<Object> response = inventarioService.newInventario(inventario);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("El stock inicial del inventario debe ser mayor que cero.", ((HashMap) response.getBody()).get("message"));
+        verify(inventarioRepository,never()).save(inventario);
+    }
+    @Test
+    public void testNewInventario_StockMinimo_Zero(){
+        inventario.setSalida(5);
+        inventario.setEntrada(10);
+        inventario.setStockMinimo(-10);
+        inventario.setStockInicial(1);
+        inventario.setProducto(new Producto());
+        ResponseEntity<Object> response = inventarioService.newInventario(inventario);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("El stock minimo del inventario debe ser mayor que cero.", ((HashMap) response.getBody()).get("message"));
+        verify(inventarioRepository,never()).save(inventario);
+    }
+
+    @Test
     public void testNewInventario_Success(){
         inventario.setSalida(5);
         inventario.setEntrada(10);
@@ -61,17 +105,6 @@ public class InventarioServiceTest {
         assertEquals("Se guardó con éxito",((HashMap) response.getBody()).get("message"));
         verify(inventarioRepository,times(1)).save(inventario);
     }
-
-    @Test
-    public void testNewInventario_BadRequest_Invalid(){
-        inventario.setIdInventario(1);
-        ResponseEntity<Object> response = inventarioService.newInventario(inventario);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("No mandar ID, este se genera automaticamente", ((HashMap) response.getBody()).get("message"));
-        verify(inventarioRepository,never()).save(inventario);
-
-    }
-
 
     @Test
     public void testNewInventario_BadRequest_NullFields(){
@@ -89,19 +122,37 @@ public class InventarioServiceTest {
     }
 
     @Test
-    public void testUpdateInventario_Sucess(){
-        inventario.setSalida(1);
-        inventario.setEntrada(1);
-        inventario.setStockMinimo(1);
-        inventario.setStockInicial(1);
-        inventario.setIdInventario(1);
-        inventario.setProducto(new Producto());
-        when(productoRepository.existsById(inventario.getProducto().getIdProducto())).thenReturn(true);
-        when(inventarioRepository.existsById(inventario.getIdInventario())).thenReturn(true);
-        when(inventarioRepository.save(inventario)).thenReturn(inventario);
+    public void testUpdateInventario_BadRequest_Null(){
+        inventario.setProducto(null);
         ResponseEntity<Object> response = inventarioService.updateInventario(1,inventario);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("Se guardó con éxito", ((HashMap) response.getBody()).get("message"));
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Ingresa todos los campos de la tabla", ((HashMap) response.getBody()).get("message"));
+        verify(inventarioRepository,never()).save(inventario);
+    }
+
+    @Test
+    public void testUpdateInventario_StockInicial_Zero(){
+        inventario.setSalida(5);
+        inventario.setEntrada(10);
+        inventario.setStockMinimo(-10);
+        inventario.setStockInicial(-10);
+        inventario.setProducto(new Producto());
+        ResponseEntity<Object> response = inventarioService.updateInventario(1,inventario);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("El stock inicial del inventario debe ser mayor que cero.", ((HashMap) response.getBody()).get("message"));
+        verify(inventarioRepository,never()).save(inventario);
+    }
+    @Test
+    public void testUpdateInventario_StockMinimo_Zero(){
+        inventario.setSalida(5);
+        inventario.setEntrada(10);
+        inventario.setStockMinimo(-10);
+        inventario.setStockInicial(1);
+        inventario.setProducto(new Producto());
+        ResponseEntity<Object> response = inventarioService.updateInventario(1,inventario);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("El stock minimo del inventario debe ser mayor que cero.", ((HashMap) response.getBody()).get("message"));
+        verify(inventarioRepository,never()).save(inventario);
     }
 
     @Test
@@ -121,9 +172,40 @@ public class InventarioServiceTest {
     }
 
     @Test
+    public void testUpdateInventario_No_Sucess(){
+        inventario.setSalida(1);
+        inventario.setEntrada(1);
+        inventario.setStockMinimo(1);
+        inventario.setStockInicial(1);
+        inventario.setIdInventario(1);
+        inventario.setProducto(new Producto());
+        when(productoRepository.existsById(inventario.getProducto().getIdProducto())).thenReturn(false);
+        when(inventarioRepository.existsById(anyInt())).thenReturn(true);
+        ResponseEntity<Object> response = inventarioService.updateInventario(1,inventario);
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals("El producto no existe", ((HashMap) response.getBody()).get("message"));
+    }
+
+    @Test
+    public void testUpdateInventario_Sucess(){
+        inventario.setSalida(1);
+        inventario.setEntrada(1);
+        inventario.setStockMinimo(1);
+        inventario.setStockInicial(1);
+        inventario.setIdInventario(1);
+        inventario.setProducto(new Producto());
+        when(productoRepository.existsById(inventario.getProducto().getIdProducto())).thenReturn(true);
+        when(inventarioRepository.existsById(inventario.getIdInventario())).thenReturn(true);
+        when(inventarioRepository.save(inventario)).thenReturn(inventario);
+        ResponseEntity<Object> response = inventarioService.updateInventario(1,inventario);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals("Se guardó con éxito", ((HashMap) response.getBody()).get("message"));
+    }
+
+    @Test
     public void testDeleteInventario (){
         inventario.setIdInventario(1);
-        when(inventarioRepository.existsById(inventario.getIdInventario())).thenReturn(true);
+        when(inventarioRepository.existsById(anyInt())).thenReturn(true);
         ResponseEntity<Object> response = inventarioService.deleteInventario(1);
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertEquals("Inventario eliminado",((HashMap) response.getBody()).get("message"));
@@ -132,7 +214,7 @@ public class InventarioServiceTest {
     @Test
     public void testDeleteInventario_error(){
         inventario.setIdInventario(1);
-        when(inventarioRepository.existsById(inventario.getIdInventario())).thenReturn(false);
+        when(inventarioRepository.existsById(anyInt())).thenReturn(false);
         ResponseEntity<Object> response = inventarioService.deleteInventario(1);
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertEquals("No existe el inventario con ese ID",((HashMap) response.getBody()).get("message"));
