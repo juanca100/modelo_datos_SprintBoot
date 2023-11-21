@@ -61,7 +61,7 @@ public class ResenaProductoService {
         }
 
         if(!productoRepository.existsById(resenaProducto.getProducto().getIdProducto())){
-            return createErrorResponse("El vendedor no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
+            return createErrorResponse("El producto no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
         }
 
         if (resenaProducto.getDescripcion().matches("\\d+")) {
@@ -114,7 +114,7 @@ public class ResenaProductoService {
         }
 
         if(!productoRepository.existsById(resenaProducto.getProducto().getIdProducto())){
-            return createErrorResponse("El vendedor no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
+            return createErrorResponse("El producto no existe, ingrese un ID valido",HttpStatus.BAD_REQUEST);
         }
 
         if (resenaProducto.getDescripcion().matches("\\d+")) {
