@@ -114,6 +114,14 @@ class EstadoPagoServiceTest {
     }
 
     @Test
+    void testUpdateEstadosPagos_NullFileds(){
+        estadoPago.setEstadoPago(null);
+        ResponseEntity<Object> response = estadoPagoService.updateEstadoPago(1, estadoPago);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Ingresa todos los campos de la tabla",((HashMap) response.getBody()).get("message"));
+    }
+
+    @Test
     void testUpdateEstadosPagos_IdError(){
         estadoPago.setEstadoPago("prueba");
         estadoPago.setIdEstadoPago(0);
