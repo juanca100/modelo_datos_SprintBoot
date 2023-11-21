@@ -183,7 +183,24 @@ class TransaccionPagoServiceTest {
         assertEquals("Se actualizó con éxito", ((HashMap) response.getBody()).get("message"));
         verify(transaccionPagoRepository, times(1)).save(transaccionPago);
     }
+    @Test
+    public void testUpdateTransaccionPago_NullFields() {
+        int id = 1;
+        transaccionPago.setIdTransaccionPago(id);
+        transaccionPago.setTransaccion(null);
+        transaccionPago.setTipoPago(null);
+        transaccionPago.setDescripcion(null);
+        transaccionPago.setMonto_total(0);
+        transaccionPago.setEstadoPago(null);
 
+        when(transaccionPagoRepository.existsById(id)).thenReturn(true);
+
+        ResponseEntity<Object> response = transaccionPagoService.updateTransaccionPago(id, transaccionPago);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Ingresa todos los campos obligatorios", ((HashMap) response.getBody()).get("message"));
+        verify(transaccionPagoRepository, never()).save(transaccionPago);
+    }
     @Test
     public void testUpdateTransaccionPago_NotFound() {
         int id = 1;
