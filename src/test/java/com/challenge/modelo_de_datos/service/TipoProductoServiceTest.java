@@ -2,7 +2,7 @@ package com.challenge.modelo_de_datos.service;
 
 import com.challenge.modelo_de_datos.model.Categoria;
 import com.challenge.modelo_de_datos.model.TipoProducto;
-import com.challenge.modelo_de_datos.repository.categoriarepository;
+import com.challenge.modelo_de_datos.repository.CategoriaRepository;
 import com.challenge.modelo_de_datos.repository.TipoProductoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class TipoProductoServiceTest {
     @Mock
     private TipoProductoRepository tipoProductoRepository;
     @Mock
-    private categoriarepository categoriaRepository;
+    private CategoriaRepository categoriaRepository;
     @InjectMocks
     private TipoProductoService tipoProductoService;
     private TipoProducto tipoProducto;

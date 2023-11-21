@@ -1,7 +1,7 @@
 package com.challenge.modelo_de_datos.service;
 
 import com.challenge.modelo_de_datos.model.TipoProducto;
-import com.challenge.modelo_de_datos.repository.categoriarepository;
+import com.challenge.modelo_de_datos.repository.CategoriaRepository;
 import com.challenge.modelo_de_datos.repository.TipoProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,10 @@ import java.util.List;
 @Service
 public class TipoProductoService {
     private final TipoProductoRepository TipoProductoRepository;
-    private final categoriarepository CategoriaRepository;
+    private final CategoriaRepository CategoriaRepository;
 
     @Autowired
-    public TipoProductoService(TipoProductoRepository tipoProductoRepository, categoriarepository categoriaRepository) {
+    public TipoProductoService(TipoProductoRepository tipoProductoRepository, CategoriaRepository categoriaRepository) {
         TipoProductoRepository = tipoProductoRepository;
         CategoriaRepository = categoriaRepository;
     }
